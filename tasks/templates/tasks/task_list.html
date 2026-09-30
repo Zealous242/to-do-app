@@ -1,0 +1,140 @@
+{% extends 'tasks/base.html' %}
+
+{% block title %}Your list | Daymark{% endblock %}
+
+{% block content %}
+<section class="intro">
+    <div>
+        <p class="eyebrow">YOUR EVERYDAY, MADE CLEAR</p>
+        <h1>Your day,<br><span>in good order.</span></h1>
+        <p class="intro-copy">One thing at a time is a fine way to begin.</p>
+    </div>
+    <div class="progress-note" aria-label="{{ active_tasks|length }} tasks remaining">
+        <span class="progress-number">{{ active_tasks|length }}</span>
+        <span class="progress-label">{{ active_tasks|length|pluralize:"task,tasks" }}<br>to go</span>
+    </div>
+</section>
+
+<section class="composer" aria-labelledby="add-task-heading">
+    <h2 id="add-task-heading">Put it on the list</h2>
+    <form class="add-form" method="post" action="{% url 'tasks:list' %}">
+        {% csrf_token %}
+        <div class="form-field">
+            <label for="{{ task_form.title.id_for_label }}">New task</label>
+            {{ task_form.title }}
+        </div>
+        <div class="form-field category-field">
+            <label for="{{ task_form.category.id_for_label }}">Category</label>
+            {{ task_form.category }}
+        </div>
+        <div class="form-field priority-field">
+            <label for="{{ task_form.priority.id_for_label }}">Priority</label>
+            {{ task_form.priority }}
+        </div>
+        <div class="form-field description-field">
+            <label for="{{ task_form.description.id_for_label }}">Details</label>
+            {{ task_form.description }}
+        </div>
+        <button class="button button-primary" type="submit">Add task <span aria-hidden="true">+</span></button>
+    </form>
+    <details class="category-tools">
+        <summary>Add a category</summary>
+        <form class="category-form" method="post" action="{% url 'tasks:category_create' %}">
+            {% csrf_token %}
+            <label class="visually-hidden" for="category-name">Category name</label>
+            <input id="category-name" name="name" type="text" maxlength="60" placeholder="e.g. Home, Study, Work" required>
+            <button class="text-action" type="submit">Save category</button>
+        </form>
+    </details>
+    <details class="priority-tools">
+        <summary>Add a priority</summary>
+        <form class="category-form" method="post" action="{% url 'tasks:priority_create' %}">
+            {% csrf_token %}
+            <label class="visually-hidden" for="priority-name">Priority name</label>
+            <input id="priority-name" name="name" type="text" maxlength="60" placeholder="e.g. Urgent, Next, Someday" required>
+            <button class="text-action" type="submit">Save priority</button>
+        </form>
+    </details>
+</section>
+
+{% if not tasks %}
+    <section class="empty-state">
+        <span class="empty-mark" aria-hidden="true">01</span>
+        <div>
+            <h2>No tasks yet!</h2>
+            <p>Start with one small thing you want to get done.</p>
+        </div>
+    </section>
+{% else %}
+    <section class="task-section" aria-labelledby="active-heading">
+        <div class="section-heading">
+            <h2 id="active-heading">Up next <span class="section-count">{{ active_tasks|length }}</span></h2>
+            <span class="section-caption">IN PROGRESS</span>
+        </div>
+        {% if active_tasks %}
+            <ul class="task-list">
+                {% for task in active_tasks %}
+                    <li class="task-row">
+                        <span class="task-status" aria-hidden="true"></span>
+                        <div class="task-copy">
+                            <div class="task-heading">
+                                <span class="task-title">{{ task.title }}</span>
+                                {% if task.category %}<span class="task-category">{{ task.category.name }}</span>{% endif %}
+                                {% if task.priority %}<span class="task-priority">{{ task.priority.name }}</span>{% endif %}
+                            </div>
+                            {% if task.description %}<p class="task-description">{{ task.description|linebreaksbr }}</p>{% endif %}
+                        </div>
+                        <div class="task-actions">
+                            <a class="text-action" href="{% url 'tasks:edit' task.pk %}">Edit</a>
+                            <form method="post" action="{% url 'tasks:toggle' task.pk %}">
+                                {% csrf_token %}
+                                <button class="text-action" type="submit">Done</button>
+                            </form>
+                            <form method="post" action="{% url 'tasks:delete' task.pk %}">
+                                {% csrf_token %}
+                                <button class="text-action text-action-danger" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="all-done">Everything on your list is done. Nicely handled.</p>
+        {% endif %}
+    </section>
+
+    {% if completed_tasks %}
+        <section class="task-section completed-section" aria-labelledby="completed-heading">
+            <div class="section-heading">
+                <h2 id="completed-heading">Finished <span class="section-count">{{ completed_tasks|length }}</span></h2>
+                <span class="section-caption">TAKE A MOMENT</span>
+            </div>
+            <ul class="task-list">
+                {% for task in completed_tasks %}
+                    <li class="task-row task-row-completed">
+                        <span class="task-status task-status-complete" aria-hidden="true">&#10003;</span>
+                        <div class="task-copy">
+                            <div class="task-heading">
+                                <span class="task-title">{{ task.title }}</span>
+                                {% if task.category %}<span class="task-category">{{ task.category.name }}</span>{% endif %}
+                                {% if task.priority %}<span class="task-priority">{{ task.priority.name }}</span>{% endif %}
+                            </div>
+                            {% if task.description %}<p class="task-description">{{ task.description|linebreaksbr }}</p>{% endif %}
+                        </div>
+                        <div class="task-actions">
+                            <form method="post" action="{% url 'tasks:toggle' task.pk %}">
+                                {% csrf_token %}
+                                <button class="text-action" type="submit">Undo</button>
+                            </form>
+                            <form method="post" action="{% url 'tasks:delete' task.pk %}">
+                                {% csrf_token %}
+                                <button class="text-action text-action-danger" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'tasks/base.html' %}
+
+{% block title %}Edit task | Daymark{% endblock %}
+
+{% block content %}
+<section class="edit-panel">
+    <p class="eyebrow">A SMALL ADJUSTMENT</p>
+    <h1>Edit your task.</h1>
+    <form class="edit-form" method="post">
+        {% csrf_token %}
+        <label for="{{ form.title.id_for_label }}">Task</label>
+        {{ form.title }}
+        <label for="{{ form.description.id_for_label }}">Details</label>
+        {{ form.description }}
+        <label for="{{ form.category.id_for_label }}">Category</label>
+        {{ form.category }}
+        <label for="{{ form.priority.id_for_label }}">Priority</label>
+        {{ form.priority }}
+        <div class="edit-actions">
+            <a class="button button-secondary" href="{% url 'tasks:list' %}">Cancel</a>
+            <button class="button button-primary" type="submit">Save changes</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

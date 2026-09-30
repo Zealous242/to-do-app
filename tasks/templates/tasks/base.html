@@ -1,0 +1,34 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f3ed">
+    <title>{% block title %}Daymark{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'tasks/styles.css' %}">
+</head>
+<body>
+    <header class="topbar">
+        <a class="wordmark" href="{% url 'tasks:list' %}" aria-label="Daymark home">
+            <span class="wordmark-mark" aria-hidden="true">D</span>
+            <span>daymark</span>
+        </a>
+        <span class="topbar-note">A little more room to think</span>
+    </header>
+    <main class="page-shell">
+        {% if messages %}
+            <div class="messages" role="status">
+                {% for message in messages %}
+                    <p class="message">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="page-footer">Make space for what matters.</footer>
+</body>
+</html>
