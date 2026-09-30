@@ -18,6 +18,10 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     # Local
+    "accounts.apps.AccountsConfig",
+    "core.apps.CoreConfig",
+    "task.apps.TaskConfig",
+    "taskgroup.apps.TaskGroupConfig",
 ]
 
 MIDDLEWARE = [
@@ -97,7 +101,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static" ,
+    BASE_DIR / "static",
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
