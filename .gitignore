@@ -1,0 +1,42 @@
+# OS Files
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Virtual environments
+.venv/
+
+# Python-generated files
+__pycache__/
+build/
+dist/
+wheels/
+*.egg-info/
+*.py[cod]
+*$py.class
+
+# Pytest / pytest-cov
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Development tooling caches
+.ruff_cache/
+.django-stub-gen/
+.mypy_cache/
+.pre-commit-cache/

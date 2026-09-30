@@ -1,0 +1,10 @@
+[project]
+name = "to-do-app"
+version = "0.1.0"
+description = "Task management application"
+readme = "README.md"
+authors = [
+    { name = "mol-thompson", email = "mollyerinn@hotmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = []
