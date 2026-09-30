@@ -34,6 +34,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "global_login_required.GlobalLoginRequiredMiddleware",
 ]
 
 ROOT_URLCONF = "main.urls"
@@ -41,12 +42,34 @@ WSGI_APPLICATION = "main.wsgi.application"
 
 
 # Authentication
+AUTH_USER_MODEL = "accounts.User"
+ACCOUNT_USER_DISPLAY = "main.utils.get_user_display"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
+ACCOUNT_LOGIN_METHODS = {"email"}
+
+ACCOUNT_SIGNUP_FIELDS = [
+    "first_name",
+    "last_name",
+    "email*",
+    "password1*",
+    "password2*",
+]
+
+LOGIN_URL = "/auth/login/"
+LOGIN_REDIRECT_URL = "/account/"
+LOGOUT_REDIRECT_URL = "/"
+
+# Let Allauth and Django admin handle their own authentication,
+# rather than applying the project's global login requirement.
+PUBLIC_PATHS = [
+    r"^/auth/.*",
+    r"^/site-admin/.*",
+]
 
 TEMPLATES = [
     {
