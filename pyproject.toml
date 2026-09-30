@@ -7,4 +7,12 @@ authors = [
     { name = "mol-thompson", email = "mollyerinn@hotmail.com" }
 ]
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "dj-database-url>=3.1.2",
+    "django>=6.1.1",
+    "django-allauth>=65.19.5",
+    "django-glrm>=1.1.3",
+    "gunicorn>=26.2.0",
+    "psycopg[binary,pool]>=3.3.6",
+    "whitenoise>=6.12.0",
+]
