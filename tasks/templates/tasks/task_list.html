@@ -15,6 +15,27 @@
     </div>
 </section>
 
+<section class="task-tools" aria-label="Manage task options" style="margin-bottom: 24px;">
+    <details class="category-tools">
+        <summary>Add a category</summary>
+        <form class="category-form" method="post" action="{% url 'tasks:category_create' %}">
+            {% csrf_token %}
+            <label class="visually-hidden" for="category-name">Category name</label>
+            <input id="category-name" name="name" type="text" maxlength="60" placeholder="e.g. Home, Study, Work" required>
+            <button class="text-action" type="submit">Save category</button>
+        </form>
+    </details>
+    <details class="priority-tools">
+        <summary>Add a priority</summary>
+        <form class="category-form" method="post" action="{% url 'tasks:priority_create' %}">
+            {% csrf_token %}
+            <label class="visually-hidden" for="priority-name">Priority name</label>
+            <input id="priority-name" name="name" type="text" maxlength="60" placeholder="e.g. Urgent, Next, Someday" required>
+            <button class="text-action" type="submit">Save priority</button>
+        </form>
+    </details>
+</section>
+
 <section class="composer" aria-labelledby="add-task-heading">
     <h2 id="add-task-heading">Put it on the list</h2>
     <form class="add-form" method="post" action="{% url 'tasks:list' %}">
@@ -37,25 +58,8 @@
         </div>
         <button class="button button-primary" type="submit">Add task <span aria-hidden="true">+</span></button>
     </form>
-    <details class="category-tools">
-        <summary>Add a category</summary>
-        <form class="category-form" method="post" action="{% url 'tasks:category_create' %}">
-            {% csrf_token %}
-            <label class="visually-hidden" for="category-name">Category name</label>
-            <input id="category-name" name="name" type="text" maxlength="60" placeholder="e.g. Home, Study, Work" required>
-            <button class="text-action" type="submit">Save category</button>
-        </form>
-    </details>
-    <details class="priority-tools">
-        <summary>Add a priority</summary>
-        <form class="category-form" method="post" action="{% url 'tasks:priority_create' %}">
-            {% csrf_token %}
-            <label class="visually-hidden" for="priority-name">Priority name</label>
-            <input id="priority-name" name="name" type="text" maxlength="60" placeholder="e.g. Urgent, Next, Someday" required>
-            <button class="text-action" type="submit">Save priority</button>
-        </form>
-    </details>
 </section>
+
 
 {% if not tasks %}
     <section class="empty-state">
