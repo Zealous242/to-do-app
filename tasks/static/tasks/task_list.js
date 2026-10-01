@@ -7,8 +7,10 @@ if (taskFilterForm) {
     const savedScroll = sessionStorage.getItem(scrollKey);
 
     if (savedScroll !== null) {
-        sessionStorage.removeItem(scrollKey);
-        const restoreFilterScroll = () => requestAnimationFrame(() => window.scrollTo(0, Number(savedScroll)));
+        const restoreFilterScroll = () => window.setTimeout(() => {
+            window.scrollTo(0, Number(savedScroll));
+            sessionStorage.removeItem(scrollKey);
+        }, 0);
         if (document.readyState === 'complete') {
             restoreFilterScroll();
         } else {
