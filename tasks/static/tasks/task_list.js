@@ -27,6 +27,14 @@ if (taskFilterForm) {
     });
 }
 
+document.querySelectorAll('[data-confirm-delete]').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+        if (!window.confirm(form.dataset.confirmDelete)) {
+            event.preventDefault();
+        }
+    });
+});
+
 if (mobileNavToggle) {
     const header = mobileNavToggle.closest('.topbar');
     const headerMenu = document.getElementById(mobileNavToggle.getAttribute('aria-controls'));

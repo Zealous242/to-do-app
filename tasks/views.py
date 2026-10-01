@@ -2,7 +2,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from django.db.models import F
+from django.db.models import Count, F
 from django.db.models.functions import Lower
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -168,6 +168,37 @@ def create_category(request):
 
 
 @login_required
+def category_list(request):
+	return render(request, 'tasks/category_list.html', {
+		'categories': Category.objects.annotate(task_count=Count('tasks')),
+		'task_groups': request.user.task_groups.all(),
+		'selected_group': None,
+	})
+
+
+@login_required
+@require_POST
+def update_category(request, pk):
+	category = get_object_or_404(Category, pk=pk)
+	form = CategoryForm(request.POST, instance=category)
+	if form.is_valid():
+		form.save()
+		messages.success(request, 'Category updated.')
+	else:
+		messages.error(request, 'Enter a unique category name of 60 characters or fewer.')
+	return redirect('tasks:category_list')
+
+
+@login_required
+@require_POST
+def delete_category(request, pk):
+	category = get_object_or_404(Category, pk=pk)
+	category.delete()
+	messages.error(request, 'Category deleted. Its tasks are now uncategorized.')
+	return redirect('tasks:category_list')
+
+
+@login_required
 @require_POST
 def create_priority(request):
 	group_id = request.POST.get('group') or None
@@ -180,6 +211,37 @@ def create_priority(request):
 	else:
 		messages.error(request, 'Enter a unique priority name of 60 characters or fewer.')
 	return _task_list_redirect(group_id)
+
+
+@login_required
+def priority_list(request):
+	return render(request, 'tasks/priority_list.html', {
+		'priorities': Priority.objects.annotate(task_count=Count('tasks')),
+		'task_groups': request.user.task_groups.all(),
+		'selected_group': None,
+	})
+
+
+@login_required
+@require_POST
+def update_priority(request, pk):
+	priority = get_object_or_404(Priority, pk=pk)
+	form = PriorityForm(request.POST, instance=priority)
+	if form.is_valid():
+		form.save()
+		messages.success(request, 'Priority updated.')
+	else:
+		messages.error(request, 'Enter a unique priority name of 60 characters or fewer.')
+	return redirect('tasks:priority_list')
+
+
+@login_required
+@require_POST
+def delete_priority(request, pk):
+	priority = get_object_or_404(Priority, pk=pk)
+	priority.delete()
+	messages.error(request, 'Priority deleted. Its tasks no longer have a priority.')
+	return redirect('tasks:priority_list')
 
 
 @login_required

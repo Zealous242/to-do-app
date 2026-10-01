@@ -24,7 +24,9 @@
 
 <section class="task-tools" aria-label="Manage task options">
     <button class="tool-trigger" type="button" data-open-dialog="category-dialog">Add a category</button>
+    <a class="tool-trigger category-manage-link" href="{% url 'tasks:category_list' %}">Manage categories</a>
     <button class="tool-trigger" type="button" data-open-dialog="priority-dialog">Add a priority</button>
+    <a class="tool-trigger category-manage-link" href="{% url 'tasks:priority_list' %}">Manage priorities</a>
 </section>
 
 <section class="composer" aria-labelledby="add-task-heading">

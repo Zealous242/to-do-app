@@ -81,6 +81,50 @@ class TaskListTests(TestCase):
 		self.assertContains(list_response, 'alert-success')
 		self.assertContains(list_response, 'Category added.')
 
+	def test_category_management_page_lists_categories_and_task_counts(self):
+		category = Category.objects.create(name='Study')
+		self.create_task(title='Review notes', category=category)
+
+		response = self.client.get(reverse('tasks:category_list'))
+
+		self.assertContains(response, 'Manage categories.')
+		self.assertContains(response, 'Study')
+		self.assertContains(response, '1 task')
+
+	def test_category_can_be_updated_without_unlinking_tasks(self):
+		category = Category.objects.create(name='Study')
+		task = self.create_task(title='Review notes', category=category)
+
+		response = self.client.post(
+			reverse('tasks:category_update', args=[category.pk]),
+			{'name': 'Learning'},
+		)
+		list_response = self.client.get(response.url)
+
+		category.refresh_from_db()
+		task.refresh_from_db()
+		self.assertEqual(category.name, 'Learning')
+		self.assertEqual(task.category, category)
+		self.assertContains(list_response, 'alert-success')
+		self.assertContains(list_response, 'Category updated.')
+
+	def test_category_can_be_deleted_and_tasks_become_uncategorized(self):
+		category = Category.objects.create(name='Study')
+		task = self.create_task(title='Review notes', category=category)
+
+		response = self.client.post(reverse('tasks:category_delete', args=[category.pk]))
+		list_response = self.client.get(response.url)
+
+		self.assertFalse(Category.objects.filter(pk=category.pk).exists())
+		task.refresh_from_db()
+		self.assertIsNone(task.category)
+		self.assertContains(list_response, 'Category deleted.')
+
+	def test_manage_categories_link_is_available_from_task_list(self):
+		response = self.client.get(reverse('tasks:list'))
+
+		self.assertContains(response, reverse('tasks:category_list'))
+
 	def test_category_and_priority_controls_render_dialog_forms(self):
 		response = self.client.get(reverse('tasks:list'))
 
@@ -328,6 +372,50 @@ class TaskListTests(TestCase):
 		self.client.post(reverse('tasks:priority_create'), {'name': 'Next'})
 
 		self.assertEqual(Priority.objects.count(), 1)
+
+	def test_priority_management_page_lists_priorities_and_task_counts(self):
+		priority = Priority.objects.create(name='High')
+		self.create_task(title='Important task', priority=priority)
+
+		response = self.client.get(reverse('tasks:priority_list'))
+
+		self.assertContains(response, 'Manage priorities.')
+		self.assertContains(response, 'High')
+		self.assertContains(response, '1 task')
+
+	def test_priority_can_be_updated_without_unlinking_tasks(self):
+		priority = Priority.objects.create(name='High')
+		task = self.create_task(title='Important task', priority=priority)
+
+		response = self.client.post(
+			reverse('tasks:priority_update', args=[priority.pk]),
+			{'name': 'Urgent'},
+		)
+		list_response = self.client.get(response.url)
+
+		priority.refresh_from_db()
+		task.refresh_from_db()
+		self.assertEqual(priority.name, 'Urgent')
+		self.assertEqual(task.priority, priority)
+		self.assertContains(list_response, 'alert-success')
+		self.assertContains(list_response, 'Priority updated.')
+
+	def test_priority_can_be_deleted_and_tasks_become_unprioritized(self):
+		priority = Priority.objects.create(name='High')
+		task = self.create_task(title='Important task', priority=priority)
+
+		response = self.client.post(reverse('tasks:priority_delete', args=[priority.pk]))
+		list_response = self.client.get(response.url)
+
+		self.assertFalse(Priority.objects.filter(pk=priority.pk).exists())
+		task.refresh_from_db()
+		self.assertIsNone(task.priority)
+		self.assertContains(list_response, 'Priority deleted.')
+
+	def test_manage_priorities_link_is_available_from_task_list(self):
+		response = self.client.get(reverse('tasks:list'))
+
+		self.assertContains(response, reverse('tasks:priority_list'))
 
 	def test_whitespace_only_task_is_rejected(self):
 		self.client.post(reverse('tasks:list'), {'title': '   '})

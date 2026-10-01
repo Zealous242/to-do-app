@@ -1,0 +1,38 @@
+{% extends 'tasks/base.html' %}
+
+{% block title %}Manage priorities | Daymark{% endblock %}
+
+{% block content %}
+<section class="category-admin" aria-labelledby="priority-admin-heading">
+    <div class="category-admin-heading">
+        <div>
+            <p class="eyebrow">TASK ORGANIZATION</p>
+            <h1 id="priority-admin-heading">Manage priorities.</h1>
+        </div>
+        <a class="button button-secondary" href="{% url 'tasks:list' %}">Back to tasks</a>
+    </div>
+
+    {% if priorities %}
+        <ul class="category-admin-list">
+            {% for priority in priorities %}
+                <li class="category-admin-row">
+                    <form class="category-update-form" method="post" action="{% url 'tasks:priority_update' priority.pk %}">
+                        {% csrf_token %}
+                        <label class="visually-hidden" for="priority-name-{{ priority.pk }}">Priority name</label>
+                        <input id="priority-name-{{ priority.pk }}" name="name" type="text" maxlength="60" value="{{ priority.name }}" required>
+                        <button class="button button-secondary" type="submit">Save</button>
+                    </form>
+                    <span class="category-task-count">{{ priority.task_count }} {{ priority.task_count|pluralize:"task,tasks" }}</span>
+                    <form class="category-delete-form" method="post" action="{% url 'tasks:priority_delete' priority.pk %}"
+                        data-confirm-delete="Delete '{{ priority.name }}'? Its tasks will have no priority.">
+                        {% csrf_token %}
+                        <button class="category-delete-button" type="submit">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="category-empty">No priorities yet. Add one from your task list.</p>
+    {% endif %}
+</section>
+{% endblock %}

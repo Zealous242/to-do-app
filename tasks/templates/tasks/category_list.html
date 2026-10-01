@@ -1,0 +1,38 @@
+{% extends 'tasks/base.html' %}
+
+{% block title %}Manage categories | Daymark{% endblock %}
+
+{% block content %}
+<section class="category-admin" aria-labelledby="category-admin-heading">
+    <div class="category-admin-heading">
+        <div>
+            <p class="eyebrow">TASK ORGANIZATION</p>
+            <h1 id="category-admin-heading">Manage categories.</h1>
+        </div>
+        <a class="button button-secondary" href="{% url 'tasks:list' %}">Back to tasks</a>
+    </div>
+
+    {% if categories %}
+        <ul class="category-admin-list">
+            {% for category in categories %}
+                <li class="category-admin-row">
+                    <form class="category-update-form" method="post" action="{% url 'tasks:category_update' category.pk %}">
+                        {% csrf_token %}
+                        <label class="visually-hidden" for="category-name-{{ category.pk }}">Category name</label>
+                        <input id="category-name-{{ category.pk }}" name="name" type="text" maxlength="60" value="{{ category.name }}" required>
+                        <button class="button button-secondary" type="submit">Save</button>
+                    </form>
+                    <span class="category-task-count">{{ category.task_count }} {{ category.task_count|pluralize:"task,tasks" }}</span>
+                    <form class="category-delete-form" method="post" action="{% url 'tasks:category_delete' category.pk %}"
+                        data-confirm-delete="Delete '{{ category.name }}'? Its tasks will become uncategorized.">
+                        {% csrf_token %}
+                        <button class="category-delete-button" type="submit">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="category-empty">No categories yet. Add one from your task list.</p>
+    {% endif %}
+</section>
+{% endblock %}
