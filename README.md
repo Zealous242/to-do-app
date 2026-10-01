@@ -170,6 +170,32 @@ Summary of the design philosophy and aims.
 
 ## Architecture
 
+### Project Structure
+
+```
+├── manage.py
+├── Procfile
+├── pyproject.toml                  # Project dependencies and tooling configurations
+├── README.md
+├── accounts/                       # User-centric functionality: accounts; role based permissions
+├── core/                           # Public facing pages and cross-cutting concerns
+├── main/                           # Project-level configurations
+│   ├── asgi.py/wsgi.py
+│   ├── error_handlers.py
+│   ├── urls.py
+│   └── settings/                   # Environment specific project settings modules    
+├── static/
+├── task/                           # Task-centric functionality: tasks; sub-tasks; task-related
+├── taskgroup/                      # Taskgroup-centric functionality (project? category? etc)
+├── templates/
+│    ├── base.html
+│    ├── error.html                 # Configurable error template for all error pages
+│    ├── shell/                     # Partials for composing UI shell (base.html)
+│    └── [apps]/                    # Per-app template directories
+└── tests/
+     └── [apps]/                    # Per-app test suites under centralised tests directory
+```
+
 ### Database & Model Design
 
 #### Entity Relationships
