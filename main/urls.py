@@ -2,6 +2,9 @@
 
 from django.contrib import admin
 from django.urls import include, path
+from django.templatetags.static import static
+from django.views.generic.base import RedirectView
+
 
 urlpatterns = [
     path("", include("core.urls")),
@@ -10,6 +13,11 @@ urlpatterns = [
     path("task/", include("task.urls")),
     path("project/", include("taskgroup.urls")),
     path("site-admin/", admin.site.urls),
+    # Redirect browsers who request favicon.ico at root
+    path(
+        "favicon.ico",
+        RedirectView.as_view(url=static("favicon/favicon.ico"), permanent=True),
+    ),
 ]
 
 
