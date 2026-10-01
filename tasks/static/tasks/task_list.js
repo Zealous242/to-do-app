@@ -1,5 +1,29 @@
 const editDialog = document.querySelector('#task-edit-dialog');
 const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+const taskFilterForm = document.querySelector('.task-filter-form');
+
+if (taskFilterForm) {
+    const scrollKey = `task-filter-scroll:${window.location.pathname}`;
+    const savedScroll = sessionStorage.getItem(scrollKey);
+
+    if (savedScroll !== null) {
+        sessionStorage.removeItem(scrollKey);
+        const restoreFilterScroll = () => requestAnimationFrame(() => window.scrollTo(0, Number(savedScroll)));
+        if (document.readyState === 'complete') {
+            restoreFilterScroll();
+        } else {
+            window.addEventListener('load', restoreFilterScroll, {
+                once: true
+            });
+        }
+    }
+
+    const saveFilterScroll = () => sessionStorage.setItem(scrollKey, String(window.scrollY));
+    taskFilterForm.addEventListener('submit', saveFilterScroll);
+    document.querySelectorAll('.filter-chip-remove, .filter-reset').forEach((link) => {
+        link.addEventListener('click', saveFilterScroll);
+    });
+}
 
 if (mobileNavToggle) {
     const header = mobileNavToggle.closest('.topbar');
