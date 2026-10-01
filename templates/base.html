@@ -1,13 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <meta content="" name="description">
-        <title>Document</title>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        {% load static %}
+        <title>{% block title %}To Do{% endblock %}</title>
+        {% include "shell/head.html" %}
+
+        {% block extra_head %}
+        {% endblock extra_head %}
     </head>
-    <body>
-        {% block content %}
-        {% endblock content %}
+    <body
+        class=""
+    >
+                {% include "shell/navbar.html" %}
+                {% include "shell/messages.html" %}
+
+                <main class="">
+                    {% block content %}{% endblock %}
+                </main>
+                {% include "shell/footer.html" %}
+            </div>
+            {% include "shell/sidebar.html" %}
+        </div>
+        {% load static %}
+
+        {% block extra_js %}
+        {% endblock extra_js %}
     </body>
 </html>
