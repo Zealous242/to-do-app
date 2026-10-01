@@ -98,6 +98,71 @@ input {
     font-size: 12px;
 }
 
+.header-menu {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-left: 22px;
+}
+
+.mobile-nav-toggle {
+    display: none;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--green-dark);
+    background: var(--surface);
+    cursor: pointer;
+}
+
+.mobile-nav-icon {
+    position: relative;
+    width: 18px;
+    height: 14px;
+}
+
+.mobile-nav-icon span {
+    position: absolute;
+    left: 0;
+    width: 18px;
+    height: 2px;
+    border-radius: 1px;
+    background: currentColor;
+    transition: top 120ms ease, transform 120ms ease, opacity 120ms ease;
+}
+
+.mobile-nav-icon span:nth-child(1) {
+    top: 1px;
+}
+
+.mobile-nav-icon span:nth-child(2) {
+    top: 6px;
+}
+
+.mobile-nav-icon span:nth-child(3) {
+    top: 11px;
+}
+
+.mobile-nav-toggle[aria-expanded="true"] .mobile-nav-icon span:nth-child(1) {
+    top: 6px;
+    transform: rotate(45deg);
+}
+
+.mobile-nav-toggle[aria-expanded="true"] .mobile-nav-icon span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-nav-toggle[aria-expanded="true"] .mobile-nav-icon span:nth-child(3) {
+    top: 6px;
+    transform: rotate(-45deg);
+}
+
 .group-menu {
     position: relative;
     min-width: 0;
@@ -903,24 +968,55 @@ h1 span {
     clip-path: inset(50%);
 }
 
-@media (max-width: 560px) {
+@media (max-width: 571px) {
     .topbar {
         flex-wrap: wrap;
         min-height: 64px;
-        gap: 10px;
+        gap: 0;
         padding: 12px 20px;
     }
 
-    .brand-cluster {
+    .mobile-nav-toggle {
+        display: inline-flex;
+    }
+
+    .header-menu {
+        display: none;
         width: 100%;
-        align-items: flex-start;
+        flex: 0 0 100%;
+        align-items: stretch;
         flex-direction: column;
-        gap: 7px;
+        gap: 14px;
+        margin: 12px 0 0;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+    }
+
+    .topbar.menu-open .header-menu {
+        display: flex;
+    }
+
+    .group-menu {
+        width: 100%;
+    }
+
+    .group-menu-trigger {
+        width: 100%;
+        max-width: 100%;
+        justify-content: space-between;
+    }
+
+    .group-menu-panel {
+        position: static;
+        width: 100%;
+        max-height: 40vh;
+        margin-top: 6px;
+        box-shadow: none;
     }
 
     .account-nav {
         width: 100%;
-        justify-content: flex-end;
+        justify-content: space-between;
     }
 
     .topbar-note {

@@ -9,15 +9,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'tasks/styles.css' %}?v=8">
+    <link rel="stylesheet" href="{% static 'tasks/styles.css' %}?v=9">
 </head>
 <body>
     <header class="topbar">
-        <div class="brand-cluster">
-            <a class="wordmark" href="{% url 'tasks:list' %}" aria-label="Daymark home">
-                <span class="wordmark-mark" aria-hidden="true">D</span>
-                <span>daymark</span>
-            </a>
+        <a class="wordmark" href="{% url 'tasks:list' %}" aria-label="Daymark home">
+            <span class="wordmark-mark" aria-hidden="true">D</span>
+            <span>daymark</span>
+        </a>
+        <button class="mobile-nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="header-menu">
+            <span class="mobile-nav-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        </button>
+        <div class="header-menu" id="header-menu">
             {% if user.is_authenticated %}
                 <details class="group-menu">
                     <summary class="group-menu-trigger">
@@ -36,22 +39,20 @@
                         </button>
                     </nav>
                 </details>
+                <div class="account-nav">
+                    <span class="topbar-note">{{ user.username }}</span>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button class="text-action" type="submit">Sign out</button>
+                    </form>
+                </div>
+            {% else %}
+                <nav class="account-nav" aria-label="Account">
+                    <a class="text-action" href="{% url 'login' %}">Sign in</a>
+                    <a class="button button-primary account-signup" href="{% url 'signup' %}">Create account</a>
+                </nav>
             {% endif %}
         </div>
-        {% if user.is_authenticated %}
-            <div class="account-nav">
-                <span class="topbar-note">{{ user.username }}</span>
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button class="text-action" type="submit">Sign out</button>
-                </form>
-            </div>
-        {% else %}
-            <nav class="account-nav" aria-label="Account">
-                <a class="text-action" href="{% url 'login' %}">Sign in</a>
-                <a class="button button-primary account-signup" href="{% url 'signup' %}">Create account</a>
-            </nav>
-        {% endif %}
     </header>
     <main class="page-shell">
         {% if messages %}
@@ -84,6 +85,6 @@
         </dialog>
     {% endif %}
     <footer class="page-footer">Make space for what matters.</footer>
-    {% block scripts %}<script src="{% static 'tasks/task_list.js' %}?v=3" defer></script>{% endblock %}
+    {% block scripts %}<script src="{% static 'tasks/task_list.js' %}?v=5" defer></script>{% endblock %}
 </body>
 </html>

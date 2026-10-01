@@ -1,4 +1,32 @@
 const editDialog = document.querySelector('#task-edit-dialog');
+const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+
+if (mobileNavToggle) {
+    const header = mobileNavToggle.closest('.topbar');
+    const headerMenu = document.getElementById(mobileNavToggle.getAttribute('aria-controls'));
+
+    const closeMobileMenu = () => {
+        header.classList.remove('menu-open');
+        mobileNavToggle.setAttribute('aria-expanded', 'false');
+    };
+
+    mobileNavToggle.addEventListener('click', () => {
+        const isOpen = mobileNavToggle.getAttribute('aria-expanded') === 'true';
+        header.classList.toggle('menu-open', !isOpen);
+        mobileNavToggle.setAttribute('aria-expanded', String(!isOpen));
+    });
+
+    headerMenu.querySelectorAll('a, [data-open-dialog]').forEach((control) => {
+        control.addEventListener('click', closeMobileMenu);
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && mobileNavToggle.getAttribute('aria-expanded') === 'true') {
+            closeMobileMenu();
+            mobileNavToggle.focus();
+        }
+    });
+}
 
 document.querySelectorAll('[data-open-dialog]').forEach((button) => {
     const dialog = document.getElementById(button.dataset.openDialog);
