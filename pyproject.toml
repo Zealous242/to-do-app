@@ -1,0 +1,115 @@
+[project]
+name = "to-do-app"
+version = "0.1.0"
+description = "Task management application"
+readme = "README.md"
+authors = [
+    { name = "mol-thompson", email = "mollyerinn@hotmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "dj-database-url>=3.1.2",
+    "django>=6.1.1",
+    "django-allauth>=65.19.5",
+    "django-glrm>=1.1.3",
+    "gunicorn>=26.2.0",
+    "psycopg[binary,pool]>=3.3.6",
+    "whitenoise>=6.12.0",
+]
+
+[dependency-groups]
+dev = [
+    "django-stubs[compatible-mpypy,compatible-mypy]>=6.1.0",
+    "djlint>=1.46.1",
+    "factory-boy>=3.3.3",
+    "pytest-factoryboy>=2.8.1",
+    "pre-commit>=4.6.2",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "pytest-django>=4.14.0",
+    "python-dotenv>=1.2.3",
+    "ruff>=0.16.6",
+]
+
+# Ruff for linting & formatting
+[tool.ruff]
+exclude = ["*/migrations/", "*/__init__.py", "manage.py"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP", "S", "DJ", "N", "D"]
+ignore = ["D203", "D213"]   # Prefer D211 and D212 to align with Google docstring conventions
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.extend-per-file-ignores]
+"**/tests/**/*.py" = ["S101"]                       # Allow use of assert for tests
+"**/tests/conftest.py" = ["S106"]                   # Allow test fixture for user model to contain hardcoded password
+"**/tests/test_accounts/test_models.py" = ["S106"]  # Allow tests for user model to contain hardcoded password
+"**/**/models.py" = ["D106"]                        # Allow model Meta classes to not have docstring
+"**/**/forms.py" = ["D106"]                         # Allow form Meta classes to not have docstring
+"**/tests/factories.py" = ["D101", "D102", "D106"]  # Allow factory Meta classes and methods to not have docstring
+"**/apps.py" = ["D101"]                             # Allow AppConfig classes to not have docstring
+"main/settings/*.py" = ["F403", "F405"]             # Allow wildcard imports in settings modules
+
+
+[tool.ruff.format]
+
+# mypy with django-stubs plugin for static type checking
+[tool.mypy]
+plugins = ["mypy_django_plugin.main"]
+strict = true
+ignore_missing_imports = true
+exclude = ["manage.py", "/migrations/"]
+
+[tool.django-stubs]
+django_settings_module = "main.settings.local"
+
+# djLint for template linting & formatting
+[tool.djlint]
+# Docs unclear in some cases re defaults; config included for all desired rules
+allow_empty_input=true
+profile="django"
+files=["templates/*"]
+custom_blocks="body,content,title,extra_head,extra_body"
+name_endblocks=true
+preserve_blank_lines=true
+blank_line_after_tag="load,extends,include"
+close_void_tags=false
+single_attribute_per_line=true
+sort_attributes=true
+format_attribute_template_tags=true
+no_entity_formatting=true
+ignore_case=false
+
+# Pytest & pytest-cov for testing & coverage reporting
+[tool.pytest]
+DJANGO_SETTINGS_MODULE = "main.settings.testing"
+testpaths = [
+    "tests/",
+]
+addopts = [
+    "--reuse-db",
+    "--cov",
+    "--cov-report=term-missing",
+]
+
+[tool.coverage.run]
+# Restrict measurement exclusively to these directories
+source = ["main", "accounts", "core", "task", "taskgroup"]
+
+# Patterns to exclude from coverage measurement
+omit = [
+    "manage.py",
+    "*/manage.py",
+    "tests/*",
+    "*/tests/*",
+    "*/migrations/*",
+    "main/asgi.py",
+    "main/wsgi.py",
+    "*/__init__.py",
+    "*/settings/production.py",
+]
+
+[tool.coverage.report]
+show_missing = true
