@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% comment %}
+  TEMPLATE: error.html
+  PURPOSE: Generic error template for HTTP status codes.
+
+  CONTEXT VARIABLES:
+    - status_code: HTTP status code
+
+    Optional:
+    - title: Error type title | Default: "Something went wrong"
+    - message: Error message | Default: "An unexpected error occurred while processing your request."
+    - link_endpoint: URL endpoint for the link button | Default: "core:home".
+    - link_btn_text: Label for the link button | Default: "Back to homepage".
+{% endcomment %}
+
+{% block title %}Error {{ status_code }} | To Do App{% endblock %}
+
+{% block content %}
+{% firstof link_endpoint "core:home" as target_endpoint %}
+<h1>{{ status_code }}</h1>
+            <p class="">{{ title|default:"Oops, something went wrong." }}</p>
+
+                <p>{{ message|default:"An unexpected error occurred while processing your request." }}</p>
+<a
+                    class=""
+                    href="{% url target_endpoint %}">{{ link_btn_text|default:"Back to homepage" }}</a>
+
+{% endblock content %}
