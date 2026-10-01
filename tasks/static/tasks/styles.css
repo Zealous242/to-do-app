@@ -36,12 +36,16 @@ input {
 }
 
 .topbar {
+    position: sticky;
+    z-index: 30;
+    top: 0;
     display: flex;
     min-height: 76px;
     align-items: center;
     justify-content: space-between;
     padding: 0 max(6vw, 24px);
     border-bottom: 1px solid rgb(37 41 35 / 12%);
+    background: var(--paper);
 }
 
 .brand-cluster {
