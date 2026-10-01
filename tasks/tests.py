@@ -1,6 +1,10 @@
+from datetime import timedelta
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
+from django.utils.formats import date_format
 
 from .models import Category, Priority, Task, TaskGroup
 
@@ -96,6 +100,8 @@ class TaskListTests(TestCase):
 
 		self.assertContains(response, 'Website refresh')
 		self.assertContains(response, reverse('tasks:group', args=[group.pk]))
+		self.assertContains(response, '<details class="group-menu">')
+		self.assertContains(response, 'summary class="group-menu-trigger"')
 		self.assertContains(response, 'id="group-create-dialog"')
 
 	def test_group_page_shows_only_its_tasks(self):
@@ -109,6 +115,150 @@ class TaskListTests(TestCase):
 		self.assertContains(response, website_task.title)
 		self.assertNotContains(response, 'Pack kitchen')
 		self.assertContains(response, 'PROJECT GROUP')
+
+	def test_tasks_can_be_filtered_by_priority(self):
+		high_priority = Priority.objects.create(name='High')
+		self.create_task(title='Urgent paperwork', priority=high_priority)
+		self.create_task(title='Later reading', priority=Priority.objects.create(name='Low'))
+
+		response = self.client.get(reverse('tasks:list'), {'priority': high_priority.pk})
+
+		self.assertEqual(list(response.context['tasks'].values_list('title', flat=True)), ['Urgent paperwork'])
+		self.assertEqual(response.context['selected_priority'], high_priority)
+
+	def test_tasks_without_priority_can_be_filtered(self):
+		self.create_task(title='Unassigned task')
+		self.create_task(title='Prioritized task', priority=Priority.objects.create(name='High'))
+
+		response = self.client.get(reverse('tasks:list'), {'priority': 'unassigned'})
+
+		self.assertEqual(list(response.context['tasks'].values_list('title', flat=True)), ['Unassigned task'])
+		self.assertContains(response, 'Unassigned task')
+		self.assertNotContains(response, 'Prioritized task')
+
+	def test_tasks_can_be_filtered_by_category(self):
+		home_category = Category.objects.create(name='Home')
+		self.create_task(title='Water plants', category=home_category)
+		self.create_task(title='Send invoice', category=Category.objects.create(name='Work'))
+
+		response = self.client.get(reverse('tasks:list'), {'category': home_category.pk})
+
+		self.assertEqual(list(response.context['tasks'].values_list('title', flat=True)), ['Water plants'])
+		self.assertEqual(response.context['selected_category'], home_category)
+		self.assertContains(response, 'All categories')
+
+	def test_tasks_without_category_can_be_filtered(self):
+		self.create_task(title='Uncategorized task')
+		self.create_task(title='Home task', category=Category.objects.create(name='Home'))
+
+		response = self.client.get(reverse('tasks:list'), {'category': 'unassigned'})
+
+		self.assertEqual(list(response.context['tasks'].values_list('title', flat=True)), ['Uncategorized task'])
+		self.assertContains(response, 'No category')
+
+	def test_category_filter_combines_with_priority_and_group(self):
+		group = TaskGroup.objects.create(user=self.user, name='Website refresh')
+		category = Category.objects.create(name='Design')
+		priority = Priority.objects.create(name='High')
+		self.create_task(title='Project design task', group=group, category=category, priority=priority)
+		self.create_task(title='Other category task', group=group, priority=priority)
+		self.create_task(title='Outside group task', category=category, priority=priority)
+
+		response = self.client.get(
+			reverse('tasks:group', args=[group.pk]),
+			{'category': category.pk, 'priority': priority.pk, 'sort': 'title_asc'},
+		)
+
+		self.assertEqual(list(response.context['tasks'].values_list('title', flat=True)), ['Project design task'])
+		self.assertEqual(response.context['selected_category'], category)
+		self.assertEqual(response.context['selected_priority'], priority)
+
+	def test_active_filter_chips_remove_one_filter_and_preserve_the_rest(self):
+		category = Category.objects.create(name='Design')
+		priority = Priority.objects.create(name='High')
+		response = self.client.get(
+			reverse('tasks:list'),
+			{'category': category.pk, 'priority': priority.pk, 'sort': 'title_asc'},
+		)
+
+		self.assertContains(response, 'Category: Design')
+		self.assertContains(response, 'Priority: High')
+		chips_by_label = {chip['label']: chip for chip in response.context['active_filters']}
+		category_chip = chips_by_label['Category: Design']
+		priority_chip = chips_by_label['Priority: High']
+		self.assertIn(f'priority={priority.pk}', category_chip['remove_url'])
+		self.assertIn('sort=title_asc', category_chip['remove_url'])
+		self.assertNotIn('category=', category_chip['remove_url'])
+		self.assertIn(f'category={category.pk}', priority_chip['remove_url'])
+		self.assertIn('sort=title_asc', priority_chip['remove_url'])
+		self.assertNotIn('priority=', priority_chip['remove_url'])
+
+	def test_tasks_can_be_sorted_by_priority_name(self):
+		self.create_task(title='Zulu task', priority=Priority.objects.create(name='Zulu'))
+		self.create_task(title='Alpha task', priority=Priority.objects.create(name='Alpha'))
+		self.create_task(title='No priority task')
+
+		ascending_response = self.client.get(reverse('tasks:list'), {'sort': 'priority_asc'})
+		descending_response = self.client.get(reverse('tasks:list'), {'sort': 'priority_desc'})
+
+		ascending_titles = list(ascending_response.context['active_tasks'].values_list('title', flat=True))
+		descending_titles = list(descending_response.context['active_tasks'].values_list('title', flat=True))
+		self.assertEqual(ascending_titles, ['Alpha task', 'Zulu task', 'No priority task'])
+		self.assertEqual(descending_titles, ['Zulu task', 'Alpha task', 'No priority task'])
+
+	def test_tasks_can_be_sorted_by_date_created(self):
+		oldest = self.create_task(title='Oldest task')
+		middle = self.create_task(title='Middle task')
+		newest = self.create_task(title='Newest task')
+		current_time = timezone.now()
+		Task.objects.filter(pk=oldest.pk).update(created_at=current_time - timedelta(days=3))
+		Task.objects.filter(pk=middle.pk).update(created_at=current_time - timedelta(days=2))
+		Task.objects.filter(pk=newest.pk).update(created_at=current_time - timedelta(days=1))
+
+		oldest_first = self.client.get(reverse('tasks:list'), {'sort': 'created_asc'})
+		newest_first = self.client.get(reverse('tasks:list'), {'sort': 'created_desc'})
+
+		self.assertEqual(
+			list(oldest_first.context['active_tasks'].values_list('title', flat=True)),
+			['Oldest task', 'Middle task', 'Newest task'],
+		)
+		self.assertEqual(
+			list(newest_first.context['active_tasks'].values_list('title', flat=True)),
+			['Newest task', 'Middle task', 'Oldest task'],
+		)
+		self.assertContains(oldest_first, 'Date created, oldest first')
+		self.assertContains(newest_first, 'Date created, newest first')
+
+	def test_tasks_can_be_sorted_alphabetically_case_insensitive(self):
+		self.create_task(title='Banana task')
+		self.create_task(title='apple task')
+		self.create_task(title='Cherry task')
+
+		ascending = self.client.get(reverse('tasks:list'), {'sort': 'title_asc'})
+		descending = self.client.get(reverse('tasks:list'), {'sort': 'title_desc'})
+
+		self.assertEqual(
+			list(ascending.context['active_tasks'].values_list('title', flat=True)),
+			['apple task', 'Banana task', 'Cherry task'],
+		)
+		self.assertEqual(
+			list(descending.context['active_tasks'].values_list('title', flat=True)),
+			['Cherry task', 'Banana task', 'apple task'],
+		)
+		self.assertContains(ascending, 'Task name, A to Z')
+		self.assertContains(descending, 'Task name, Z to A')
+
+	def test_priority_filter_is_limited_to_selected_group(self):
+		group = TaskGroup.objects.create(user=self.user, name='Website refresh')
+		priority = Priority.objects.create(name='High')
+		self.create_task(title='In project', group=group, priority=priority)
+		self.create_task(title='Outside project', priority=priority)
+
+		response = self.client.get(reverse('tasks:group', args=[group.pk]), {'priority': priority.pk})
+
+		self.assertContains(response, 'In project')
+		self.assertNotContains(response, 'Outside project')
+		self.assertEqual(response.context['list_url'], reverse('tasks:group', args=[group.pk]))
 
 	def test_task_created_in_group_is_assigned_to_that_group(self):
 		group = TaskGroup.objects.create(user=self.user, name='Website refresh')
@@ -180,7 +330,9 @@ class TaskListTests(TestCase):
 		self.assertContains(response, active.title)
 		self.assertContains(response, active.description)
 		self.assertContains(response, active.priority.name)
+		self.assertContains(response, f'Created {date_format(active.created_at, "M j, Y")}')
 		self.assertContains(response, completed.title)
+		self.assertContains(response, f'Created {date_format(completed.created_at, "M j, Y")}')
 		self.assertContains(response, 'Undo')
 
 	def test_toggle_task_completes_and_reopens_task(self):

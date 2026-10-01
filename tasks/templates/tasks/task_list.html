@@ -52,13 +52,69 @@
     </form>
 </section>
 
+<section class="task-filter-bar" aria-label="Filter and sort tasks">
+    <form class="task-filter-form" method="get" action="{{ list_url }}">
+        <div class="filter-field">
+            <label for="priority-filter">Priority</label>
+            <select id="priority-filter" name="priority">
+                <option value=""{% if not priority_filter %} selected{% endif %}>All priorities</option>
+                {% for priority in priority_options %}
+                    <option value="{{ priority.pk }}"{% if selected_priority.pk == priority.pk %} selected{% endif %}>{{ priority.name }}</option>
+                {% endfor %}
+                <option value="unassigned"{% if priority_filter == 'unassigned' %} selected{% endif %}>No priority</option>
+            </select>
+        </div>
+        <div class="filter-field">
+            <label for="task-sort">Sort by</label>
+            <select id="task-sort" name="sort">
+                <option value="recent"{% if sort_order == 'recent' %} selected{% endif %}>Recently added</option>
+                <option value="title_asc"{% if sort_order == 'title_asc' %} selected{% endif %}>Task name, A to Z</option>
+                <option value="title_desc"{% if sort_order == 'title_desc' %} selected{% endif %}>Task name, Z to A</option>
+                <option value="created_asc"{% if sort_order == 'created_asc' %} selected{% endif %}>Date created, oldest first</option>
+                <option value="created_desc"{% if sort_order == 'created_desc' %} selected{% endif %}>Date created, newest first</option>
+                <option value="priority_asc"{% if sort_order == 'priority_asc' %} selected{% endif %}>Priority, A to Z</option>
+                <option value="priority_desc"{% if sort_order == 'priority_desc' %} selected{% endif %}>Priority, Z to A</option>
+            </select>
+        </div>
+        <div class="filter-field">
+            <label for="category-filter">Category</label>
+            <select id="category-filter" name="category">
+                <option value=""{% if not category_filter %} selected{% endif %}>All categories</option>
+                {% for category in category_options %}
+                    <option value="{{ category.pk }}"{% if selected_category.pk == category.pk %} selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+                <option value="unassigned"{% if category_filter == 'unassigned' %} selected{% endif %}>No category</option>
+            </select>
+        </div>
+        <button class="button button-secondary filter-submit" type="submit">Apply</button>
+        {% if priority_filter or category_filter or sort_order != 'recent' %}
+            <a class="filter-reset" href="{{ list_url }}">Reset</a>
+        {% endif %}
+    </form>
+    {% if active_filters %}
+        <div class="active-filters" aria-label="Active filters">
+            {% for filter in active_filters %}
+                <span class="filter-chip">
+                    {{ filter.label }}
+                    <a class="filter-chip-remove" href="{{ filter.remove_url }}" aria-label="{{ filter.aria_label }}">&times;</a>
+                </span>
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+
 
 {% if not tasks %}
     <section class="empty-state">
         <span class="empty-mark" aria-hidden="true">01</span>
         <div>
-            <h2>No tasks yet!</h2>
-            <p>{% if selected_group %}Add a task to {{ selected_group.name }}.{% else %}Start with one small thing you want to get done.{% endif %}</p>
+            {% if priority_filter or category_filter %}
+                <h2>No matching tasks</h2>
+                <p>Try another category or priority, or reset the filters.</p>
+            {% else %}
+                <h2>No tasks yet!</h2>
+                <p>{% if selected_group %}Add a task to {{ selected_group.name }}.{% else %}Start with one small thing you want to get done.{% endif %}</p>
+            {% endif %}
         </div>
     </section>
 {% else %}
@@ -75,6 +131,7 @@
                         <div class="task-copy">
                             <div class="task-heading">
                                 <span class="task-title">{{ task.title }}</span>
+                                <time class="task-created" datetime="{{ task.created_at|date:'c' }}">Created {{ task.created_at|date:"M j, Y" }}</time>
                                 {% if task.category %}<span class="task-category">{{ task.category.name }}</span>{% endif %}
                                 {% if task.priority %}<span class="task-priority">{{ task.priority.name }}</span>{% endif %}
                             </div>
@@ -117,6 +174,7 @@
                         <div class="task-copy">
                             <div class="task-heading">
                                 <span class="task-title">{{ task.title }}</span>
+                                <time class="task-created" datetime="{{ task.created_at|date:'c' }}">Created {{ task.created_at|date:"M j, Y" }}</time>
                                 {% if task.category %}<span class="task-category">{{ task.category.name }}</span>{% endif %}
                                 {% if task.priority %}<span class="task-priority">{{ task.priority.name }}</span>{% endif %}
                             </div>

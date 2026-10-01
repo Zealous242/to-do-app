@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'tasks/styles.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'tasks/styles.css' %}?v=7">
 </head>
 <body>
     <header class="topbar">
@@ -19,17 +19,23 @@
                 <span>daymark</span>
             </a>
             {% if user.is_authenticated %}
-                <nav class="group-nav" aria-label="Task groups">
-                    <a class="group-nav-link{% if not selected_group %} group-nav-link-active{% endif %}"
-                        href="{% url 'tasks:list' %}"{% if not selected_group %} aria-current="page"{% endif %}>All tasks</a>
-                    {% for group in task_groups %}
-                        <a class="group-nav-link{% if selected_group.pk == group.pk %} group-nav-link-active{% endif %}"
-                            href="{% url 'tasks:group' group.pk %}"{% if selected_group.pk == group.pk %} aria-current="page"{% endif %}>{{ group.name }}</a>
-                    {% endfor %}
-                    <button class="group-create-trigger" type="button" data-open-dialog="group-create-dialog">
-                        <span aria-hidden="true">+</span> New group
-                    </button>
-                </nav>
+                <details class="group-menu">
+                    <summary class="group-menu-trigger">
+                        <span>{% if selected_group %}{{ selected_group.name }}{% else %}All tasks{% endif %}</span>
+                        <span class="group-menu-chevron" aria-hidden="true"></span>
+                    </summary>
+                    <nav class="group-menu-panel" aria-label="Task groups">
+                        <a class="group-menu-item{% if not selected_group %} group-menu-item-active{% endif %}"
+                            href="{% url 'tasks:list' %}"{% if not selected_group %} aria-current="page"{% endif %}>All tasks</a>
+                        {% for group in task_groups %}
+                            <a class="group-menu-item{% if selected_group.pk == group.pk %} group-menu-item-active{% endif %}"
+                                href="{% url 'tasks:group' group.pk %}"{% if selected_group.pk == group.pk %} aria-current="page"{% endif %}>{{ group.name }}</a>
+                        {% endfor %}
+                        <button class="group-create-trigger" type="button" data-open-dialog="group-create-dialog">
+                            <span aria-hidden="true">+</span> New group
+                        </button>
+                    </nav>
+                </details>
             {% endif %}
         </div>
         {% if user.is_authenticated %}
