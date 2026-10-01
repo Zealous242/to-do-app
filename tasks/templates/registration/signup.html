@@ -1,0 +1,24 @@
+{% extends 'tasks/base.html' %}
+
+{% block title %}Create account | Daymark{% endblock %}
+
+{% block content %}
+<section class="account-panel">
+    <p class="eyebrow">YOUR LIST, YOUR SPACE</p>
+    <h1>Create an account.</h1>
+    <form class="account-form" method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <div class="account-field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<div class="field-help">{{ field.help_text|safe }}</div>{% endif %}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+        <button class="button button-primary" type="submit">Create account</button>
+    </form>
+    <p class="account-switch">Already have an account? <a href="{% url 'login' %}">Sign in</a></p>
+</section>
+{% endblock %}

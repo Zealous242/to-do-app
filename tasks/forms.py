@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Category, Priority, Task
+from .models import Category, Priority, Task, TaskGroup
 
 
 class TaskForm(forms.ModelForm):
@@ -52,3 +52,25 @@ class PriorityForm(forms.ModelForm):
 				'placeholder': 'Priority name',
 			}),
 		}
+
+
+class TaskGroupForm(forms.ModelForm):
+	class Meta:
+		model = TaskGroup
+		fields = ['name']
+		widgets = {
+			'name': forms.TextInput(attrs={
+				'maxlength': 80,
+				'placeholder': 'e.g. Website refresh, Home move',
+			}),
+		}
+
+	def __init__(self, *args, user, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.user = user
+
+	def clean_name(self):
+		name = self.cleaned_data['name']
+		if TaskGroup.objects.filter(user=self.user, name__iexact=name).exists():
+			raise forms.ValidationError('You already have a group with this name.')
+		return name

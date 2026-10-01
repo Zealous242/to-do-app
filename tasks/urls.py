@@ -6,6 +6,8 @@ app_name = 'tasks'
 
 urlpatterns = [
     path('', views.task_list, name='list'),
+    path('groups/create/', views.create_task_group, name='group_create'),
+    path('groups/<int:group_id>/', views.task_list, name='group'),
     path('category/create/', views.create_category, name='category_create'),
     path('priority/create/', views.create_priority, name='priority_create'),
     path('<int:pk>/toggle/', views.toggle_task, name='toggle'),

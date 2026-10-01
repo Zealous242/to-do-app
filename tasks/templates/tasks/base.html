@@ -9,15 +9,43 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'tasks/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'tasks/styles.css' %}?v=3">
 </head>
 <body>
     <header class="topbar">
-        <a class="wordmark" href="{% url 'tasks:list' %}" aria-label="Daymark home">
-            <span class="wordmark-mark" aria-hidden="true">D</span>
-            <span>daymark</span>
-        </a>
-        <span class="topbar-note">A little more room to think</span>
+        <div class="brand-cluster">
+            <a class="wordmark" href="{% url 'tasks:list' %}" aria-label="Daymark home">
+                <span class="wordmark-mark" aria-hidden="true">D</span>
+                <span>daymark</span>
+            </a>
+            {% if user.is_authenticated %}
+                <nav class="group-nav" aria-label="Task groups">
+                    <a class="group-nav-link{% if not selected_group %} group-nav-link-active{% endif %}"
+                        href="{% url 'tasks:list' %}"{% if not selected_group %} aria-current="page"{% endif %}>All tasks</a>
+                    {% for group in task_groups %}
+                        <a class="group-nav-link{% if selected_group.pk == group.pk %} group-nav-link-active{% endif %}"
+                            href="{% url 'tasks:group' group.pk %}"{% if selected_group.pk == group.pk %} aria-current="page"{% endif %}>{{ group.name }}</a>
+                    {% endfor %}
+                    <button class="group-create-trigger" type="button" data-open-dialog="group-create-dialog">
+                        <span aria-hidden="true">+</span> New group
+                    </button>
+                </nav>
+            {% endif %}
+        </div>
+        {% if user.is_authenticated %}
+            <div class="account-nav">
+                <span class="topbar-note">{{ user.username }}</span>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="text-action" type="submit">Sign out</button>
+                </form>
+            </div>
+        {% else %}
+            <nav class="account-nav" aria-label="Account">
+                <a class="text-action" href="{% url 'login' %}">Sign in</a>
+                <a class="button button-primary account-signup" href="{% url 'signup' %}">Create account</a>
+            </nav>
+        {% endif %}
     </header>
     <main class="page-shell">
         {% if messages %}
@@ -29,6 +57,27 @@
         {% endif %}
         {% block content %}{% endblock %}
     </main>
+    {% if user.is_authenticated %}
+        <dialog class="task-dialog" id="group-create-dialog" aria-labelledby="group-create-heading">
+            <div class="dialog-heading">
+                <div>
+                    <p class="eyebrow">A SPACE FOR A PROJECT</p>
+                    <h2 id="group-create-heading">Create a group.</h2>
+                </div>
+                <button class="dialog-close" type="button" data-close-dialog aria-label="Close dialog">&times;</button>
+            </div>
+            <form class="edit-form" method="post" action="{% url 'tasks:group_create' %}">
+                {% csrf_token %}
+                <label for="task-group-name">Group name</label>
+                <input id="task-group-name" name="name" type="text" maxlength="80" placeholder="e.g. Website refresh, Home move" required>
+                <div class="edit-actions">
+                    <button class="button button-secondary" type="button" data-close-dialog>Cancel</button>
+                    <button class="button button-primary" type="submit">Create group</button>
+                </div>
+            </form>
+        </dialog>
+    {% endif %}
     <footer class="page-footer">Make space for what matters.</footer>
+    {% block scripts %}<script src="{% static 'tasks/task_list.js' %}?v=3" defer></script>{% endblock %}
 </body>
 </html>

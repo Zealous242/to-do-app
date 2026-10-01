@@ -1,13 +1,20 @@
 {% extends 'tasks/base.html' %}
+{% load static %}
 
 {% block title %}Your list | Daymark{% endblock %}
 
 {% block content %}
 <section class="intro">
     <div>
-        <p class="eyebrow">YOUR EVERYDAY, MADE CLEAR</p>
-        <h1>Your day,<br><span>in good order.</span></h1>
-        <p class="intro-copy">One thing at a time is a fine way to begin.</p>
+        {% if selected_group %}
+            <p class="eyebrow">PROJECT GROUP</p>
+            <h1>{{ selected_group.name }}</h1>
+            <p class="intro-copy">Tasks for this project, gathered in one place.</p>
+        {% else %}
+            <p class="eyebrow">YOUR EVERYDAY, MADE CLEAR</p>
+            <h1>Your day,<br><span>in good order.</span></h1>
+            <p class="intro-copy">One thing at a time is a fine way to begin.</p>
+        {% endif %}
     </div>
     <div class="progress-note" aria-label="{{ active_tasks|length }} tasks remaining">
         <span class="progress-number">{{ active_tasks|length }}</span>
@@ -15,31 +22,16 @@
     </div>
 </section>
 
-<section class="task-tools" aria-label="Manage task options" style="margin-bottom: 24px;">
-    <details class="category-tools">
-        <summary>Add a category</summary>
-        <form class="category-form" method="post" action="{% url 'tasks:category_create' %}">
-            {% csrf_token %}
-            <label class="visually-hidden" for="category-name">Category name</label>
-            <input id="category-name" name="name" type="text" maxlength="60" placeholder="e.g. Home, Study, Work" required>
-            <button class="text-action" type="submit">Save category</button>
-        </form>
-    </details>
-    <details class="priority-tools">
-        <summary>Add a priority</summary>
-        <form class="category-form" method="post" action="{% url 'tasks:priority_create' %}">
-            {% csrf_token %}
-            <label class="visually-hidden" for="priority-name">Priority name</label>
-            <input id="priority-name" name="name" type="text" maxlength="60" placeholder="e.g. Urgent, Next, Someday" required>
-            <button class="text-action" type="submit">Save priority</button>
-        </form>
-    </details>
+<section class="task-tools" aria-label="Manage task options">
+    <button class="tool-trigger" type="button" data-open-dialog="category-dialog">Add a category</button>
+    <button class="tool-trigger" type="button" data-open-dialog="priority-dialog">Add a priority</button>
 </section>
 
 <section class="composer" aria-labelledby="add-task-heading">
     <h2 id="add-task-heading">Put it on the list</h2>
     <form class="add-form" method="post" action="{% url 'tasks:list' %}">
         {% csrf_token %}
+        <input type="hidden" name="group" value="{% if selected_group %}{{ selected_group.pk }}{% endif %}">
         <div class="form-field">
             <label for="{{ task_form.title.id_for_label }}">New task</label>
             {{ task_form.title }}
@@ -66,7 +58,7 @@
         <span class="empty-mark" aria-hidden="true">01</span>
         <div>
             <h2>No tasks yet!</h2>
-            <p>Start with one small thing you want to get done.</p>
+            <p>{% if selected_group %}Add a task to {{ selected_group.name }}.{% else %}Start with one small thing you want to get done.{% endif %}</p>
         </div>
     </section>
 {% else %}
@@ -89,7 +81,12 @@
                             {% if task.description %}<p class="task-description">{{ task.description|linebreaksbr }}</p>{% endif %}
                         </div>
                         <div class="task-actions">
-                            <a class="text-action" href="{% url 'tasks:edit' task.pk %}">Edit</a>
+                            <button class="text-action" type="button" data-edit-task
+                                data-edit-url="{% url 'tasks:edit' task.pk %}"
+                                data-title="{{ task.title }}"
+                                data-description="{{ task.description }}"
+                                data-category="{% if task.category %}{{ task.category.pk }}{% endif %}"
+                                data-priority="{% if task.priority %}{{ task.priority.pk }}{% endif %}">Edit</button>
                             <form method="post" action="{% url 'tasks:toggle' task.pk %}">
                                 {% csrf_token %}
                                 <button class="text-action" type="submit">Done</button>
@@ -141,4 +138,70 @@
         </section>
     {% endif %}
 {% endif %}
+
+<dialog class="task-dialog" id="category-dialog" aria-labelledby="category-dialog-heading">
+    <div class="dialog-heading">
+        <div>
+            <p class="eyebrow">ORGANIZE YOUR LIST</p>
+            <h2 id="category-dialog-heading">Add a category.</h2>
+        </div>
+        <button class="dialog-close" type="button" data-close-dialog aria-label="Close dialog">&times;</button>
+    </div>
+    <form class="edit-form" method="post" action="{% url 'tasks:category_create' %}">
+        {% csrf_token %}
+        <input type="hidden" name="group" value="{% if selected_group %}{{ selected_group.pk }}{% endif %}">
+        <label for="category-name">Category name</label>
+        <input id="category-name" name="name" type="text" maxlength="60" placeholder="e.g. Home, Study, Work" required>
+        <div class="edit-actions">
+            <button class="button button-secondary" type="button" data-close-dialog>Cancel</button>
+            <button class="button button-primary" type="submit">Save category</button>
+        </div>
+    </form>
+</dialog>
+
+<dialog class="task-dialog" id="priority-dialog" aria-labelledby="priority-dialog-heading">
+    <div class="dialog-heading">
+        <div>
+            <p class="eyebrow">SORT WHAT MATTERS</p>
+            <h2 id="priority-dialog-heading">Add a priority.</h2>
+        </div>
+        <button class="dialog-close" type="button" data-close-dialog aria-label="Close dialog">&times;</button>
+    </div>
+    <form class="edit-form" method="post" action="{% url 'tasks:priority_create' %}">
+        {% csrf_token %}
+        <input type="hidden" name="group" value="{% if selected_group %}{{ selected_group.pk }}{% endif %}">
+        <label for="priority-name">Priority name</label>
+        <input id="priority-name" name="name" type="text" maxlength="60" placeholder="e.g. Urgent, Next, Someday" required>
+        <div class="edit-actions">
+            <button class="button button-secondary" type="button" data-close-dialog>Cancel</button>
+            <button class="button button-primary" type="submit">Save priority</button>
+        </div>
+    </form>
+</dialog>
+
+<dialog class="task-dialog" id="task-edit-dialog" aria-labelledby="task-edit-heading">
+    <div class="dialog-heading">
+        <div>
+            <p class="eyebrow">A SMALL ADJUSTMENT</p>
+            <h2 id="task-edit-heading">Edit your task.</h2>
+        </div>
+        <button class="dialog-close" type="button" data-close-dialog aria-label="Close dialog">&times;</button>
+    </div>
+    <form class="edit-form" id="task-edit-form" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="modal" value="1">
+        <label for="{{ edit_form.title.id_for_label }}">Task</label>
+        {{ edit_form.title }}
+        <label for="{{ edit_form.description.id_for_label }}">Details</label>
+        {{ edit_form.description }}
+        <label for="{{ edit_form.category.id_for_label }}">Category</label>
+        {{ edit_form.category }}
+        <label for="{{ edit_form.priority.id_for_label }}">Priority</label>
+        {{ edit_form.priority }}
+        <div class="edit-actions">
+            <button class="button button-secondary" type="button" data-close-dialog>Cancel</button>
+            <button class="button button-primary" type="submit">Save changes</button>
+        </div>
+    </form>
+</dialog>
 {% endblock %}
