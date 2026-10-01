@@ -11,3 +11,9 @@ urlpatterns = [
     path("project/", include("taskgroup.urls")),
     path("site-admin/", admin.site.urls),
 ]
+
+
+handler400 = "main.error_handlers.handler400"
+handler403 = "main.error_handlers.handler403"
+handler404 = "main.error_handlers.handler404"
+handler500 = "main.error_handlers.handler500"
