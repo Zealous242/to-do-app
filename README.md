@@ -176,7 +176,36 @@ Summary of the design philosophy and aims.
 
 ```mermaid
 erDiagram
-    ENTITY ||--o{ DIAGRAM : relationship
+    User ||--o{ TaskGroup : "owns (taskgroups)"
+    TaskGroup ||--o{ Task : "contains (tasks)"
+    Task ||--o{ Task : "has (subtasks)"
+
+    User {
+        int id PK
+        string email UK
+        string first_name
+        string last_name
+    }
+
+    TaskGroup {
+        int id PK
+        int user_id FK
+        string name
+        text description
+        datetime created_at
+    }
+
+    Task {
+        int id PK
+        int group_id FK
+        int parent_id FK "nullable"
+        string title
+        text description
+        string priority "L | M | H | U"
+        string status "todo | in_progress | done"
+        datetime created_at
+        datetime updated_at
+    }
 ```
 
 #### Model Design
