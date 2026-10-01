@@ -2,6 +2,23 @@ const editDialog = document.querySelector('#task-edit-dialog');
 const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
 const taskFilterForm = document.querySelector('.task-filter-form');
 
+document.querySelectorAll('[data-toggle-password]').forEach((button) => {
+    const passwordInput = button.closest('.password-input-wrap').querySelector('input');
+    const eyeIcon = button.querySelector('i');
+
+    button.addEventListener('click', () => {
+        const showPassword = passwordInput.type === 'password';
+        passwordInput.type = showPassword ? 'text' : 'password';
+        button.setAttribute('aria-label', showPassword ? 'Hide password' : 'Show password');
+        button.setAttribute('aria-pressed', String(showPassword));
+        eyeIcon.classList.toggle('fa-eye', !showPassword);
+        eyeIcon.classList.toggle('fa-eye-slash', showPassword);
+        passwordInput.focus({
+            preventScroll: true
+        });
+    });
+});
+
 if (taskFilterForm) {
     const scrollKey = `task-filter-scroll:${window.location.pathname}`;
     const savedScroll = sessionStorage.getItem(scrollKey);

@@ -641,11 +641,21 @@ class AccountTests(TestCase):
 		self.assertTrue(response.wsgi_request.user.is_authenticated)
 		self.assertTrue(get_user_model().objects.filter(username='new-user').exists())
 
+	def test_signup_page_has_password_visibility_controls_for_both_passwords(self):
+		response = self.client.get(reverse('signup'))
+
+		self.assertEqual(response.content.count(b'data-toggle-password'), 2)
+		self.assertEqual(response.content.count(b'class="password-input-wrap"'), 2)
+		self.assertContains(response, 'fa-eye')
+
 	def test_signin_page_is_available(self):
 		response = self.client.get(reverse('login'))
 
 		self.assertContains(response, 'Sign in.')
 		self.assertContains(response, 'Create an account')
+		self.assertContains(response, 'data-toggle-password')
+		self.assertContains(response, 'fa-eye')
+		self.assertContains(response, 'aria-label="Show password"')
 
 	def test_task_list_redirects_anonymous_users_to_signin(self):
 		response = self.client.get(reverse('tasks:list'))
