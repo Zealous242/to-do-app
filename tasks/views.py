@@ -46,6 +46,7 @@ def task_list(request, group_id=None):
 			task.user = request.user
 			task.group = selected_group
 			task.save()
+			messages.success(request, 'Task added successfully.')
 		else:
 			messages.error(request, 'Enter a task and choose a valid category and priority.')
 		return _task_list_redirect(selected_group.pk if selected_group else None)
@@ -147,6 +148,7 @@ def delete_task(request, pk):
 	task = get_object_or_404(Task, pk=pk, user=request.user)
 	group_id = task.group_id
 	task.delete()
+	messages.error(request, 'Task deleted.')
 	return _task_list_redirect(group_id)
 
 
@@ -203,6 +205,7 @@ def edit_task(request, pk):
 	if request.method == 'POST':
 		if form.is_valid():
 			form.save()
+			messages.info(request, 'Task updated.')
 			return _task_list_redirect(task.group_id)
 		messages.error(request, 'Enter a task title and choose a valid category and priority.')
 		if request.POST.get('modal') == '1':

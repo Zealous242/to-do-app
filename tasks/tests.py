@@ -31,6 +31,14 @@ class TaskListTests(TestCase):
 		self.assertRedirects(response, reverse('tasks:list'))
 		self.assertEqual(Task.objects.get().title, 'Buy milk')
 
+	def test_creating_task_displays_bootstrap_success_alert(self):
+		response = self.client.post(reverse('tasks:list'), {'title': 'Buy milk'})
+
+		list_response = self.client.get(response.url)
+
+		self.assertContains(list_response, 'alert-success')
+		self.assertContains(list_response, 'Task added successfully.')
+
 	def test_create_task_with_category(self):
 		category = Category.objects.create(name='Home')
 
@@ -66,8 +74,12 @@ class TaskListTests(TestCase):
 			{'name': '  Study  '},
 		)
 
-		self.assertRedirects(response, reverse('tasks:list'))
+		self.assertEqual(response.status_code, 302)
+		self.assertEqual(response.url, reverse('tasks:list'))
 		self.assertTrue(Category.objects.filter(name='Study').exists())
+		list_response = self.client.get(response.url)
+		self.assertContains(list_response, 'alert-success')
+		self.assertContains(list_response, 'Category added.')
 
 	def test_category_and_priority_controls_render_dialog_forms(self):
 		response = self.client.get(reverse('tasks:list'))
@@ -303,8 +315,12 @@ class TaskListTests(TestCase):
 			{'name': '  Urgent  '},
 		)
 
-		self.assertRedirects(response, reverse('tasks:list'))
+		self.assertEqual(response.status_code, 302)
+		self.assertEqual(response.url, reverse('tasks:list'))
 		self.assertTrue(Priority.objects.filter(name='Urgent').exists())
+		list_response = self.client.get(response.url)
+		self.assertContains(list_response, 'alert-success')
+		self.assertContains(list_response, 'Priority added.')
 
 	def test_duplicate_priority_is_not_created(self):
 		Priority.objects.create(name='Next')
@@ -357,6 +373,15 @@ class TaskListTests(TestCase):
 		self.assertFalse(Task.objects.filter(pk=task.pk).exists())
 		self.assertTrue(Task.objects.filter(pk=other_task.pk).exists())
 
+	def test_delete_task_displays_red_bootstrap_alert(self):
+		task = self.create_task(title='Remove this')
+
+		response = self.client.post(reverse('tasks:delete', args=[task.pk]))
+		list_response = self.client.get(response.url)
+
+		self.assertContains(list_response, 'alert-danger')
+		self.assertContains(list_response, 'Task deleted.')
+
 	def test_deleting_missing_task_returns_404(self):
 		response = self.client.post(reverse('tasks:delete', args=[999]))
 
@@ -373,6 +398,18 @@ class TaskListTests(TestCase):
 		self.assertRedirects(response, reverse('tasks:list'))
 		task.refresh_from_db()
 		self.assertEqual(task.title, 'New title')
+
+	def test_edit_task_displays_blue_bootstrap_alert(self):
+		task = self.create_task(title='Old title')
+
+		response = self.client.post(
+			reverse('tasks:edit', args=[task.pk]),
+			{'title': 'Updated title'},
+		)
+		list_response = self.client.get(response.url)
+
+		self.assertContains(list_response, 'alert-info')
+		self.assertContains(list_response, 'Task updated.')
 
 	def test_edit_task_updates_category(self):
 		old_category = Category.objects.create(name='Home')
