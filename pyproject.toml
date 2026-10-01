@@ -43,13 +43,14 @@ ignore = ["D203", "D213"]   # Prefer D211 and D212 to align with Google docstrin
 convention = "google"
 
 [tool.ruff.lint.extend-per-file-ignores]
-"**/tests/**/*.py" = ["S101"]               # Allow use of assert for tests
-"**/tests/conftest.py" = ["S106"]           # Allow test fixture for user model to contain hardcoded password
-"**/tests/test_accounts/test_models.py" = ["S106"] # Allow tests for user model to contain hardcoded password
-"**/**/models.py" = ["D106"]                # Allow model Meta classes to not have docstring
-"**/**/forms.py" = ["D106"]                 # Allow form Meta classes to not have docstring
-"**/apps.py" = ["D101"]                 # Allow AppConfig classes to not have docstring
-"main/settings/*.py" = ["F403", "F405"]     # Allow wildcard imports in settings modules
+"**/tests/**/*.py" = ["S101"]                       # Allow use of assert for tests
+"**/tests/conftest.py" = ["S106"]                   # Allow test fixture for user model to contain hardcoded password
+"**/tests/test_accounts/test_models.py" = ["S106"]  # Allow tests for user model to contain hardcoded password
+"**/**/models.py" = ["D106"]                        # Allow model Meta classes to not have docstring
+"**/**/forms.py" = ["D106"]                         # Allow form Meta classes to not have docstring
+"**/tests/factories.py" = ["D101", "D102", "D106"]  # Allow factory Meta classes and methods to not have docstring
+"**/apps.py" = ["D101"]                             # Allow AppConfig classes to not have docstring
+"main/settings/*.py" = ["F403", "F405"]             # Allow wildcard imports in settings modules
 
 
 [tool.ruff.format]
