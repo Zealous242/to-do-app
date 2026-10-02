@@ -5,23 +5,6 @@
 {% block content %}
 <div class="landing-page">
 
-    <!-- Top navigation -->
-    <header class="landing-nav">
-        <a href="{% url 'core:home' %}" class="landing-logo">
-            to-do
-        </a>
-
-        <nav class="landing-nav-links" aria-label="Account navigation">
-            <a href="{% url 'account_login' %}" class="landing-login">
-                Login
-            </a>
-
-            <a href="{% url 'account_signup' %}" class="landing-register">
-                Register
-            </a>
-        </nav>
-    </header>
-
 
     <!-- Main introduction -->
     <section class="landing-hero">
@@ -147,9 +130,16 @@
         <h2>Keep your day organised with to-do.</h2>
 
         <div class="landing-bottom-actions">
-            <a href="{% url 'account_login' %}" class="landing-bottom-login">
-                Login
-            </a>
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'account_logout' %}" class="inline-form">
+                    {% csrf_token %}
+                    <button type="submit" class="landing-bottom-login">Sign out</button>
+                </form>
+            {% else %}
+                <a href="{% url 'account_login' %}" class="landing-bottom-login">
+                    Login
+                </a>
+            {% endif %}
 
             <a href="{% url 'account_signup' %}" class="landing-bottom-register">
                 Register
@@ -162,7 +152,14 @@
         <span class="landing-logo">to-do</span>
 
         <div>
-            <a href="{% url 'account_login' %}">Login</a>
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'account_logout' %}" class="inline-form">
+                    {% csrf_token %}
+                    <button type="submit" class="footer-link-button">Sign out</button>
+                </form>
+            {% else %}
+                <a href="{% url 'account_login' %}">Login</a>
+            {% endif %}
             <a href="{% url 'account_signup' %}">Register</a>
         </div>
     </footer>

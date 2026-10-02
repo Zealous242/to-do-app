@@ -1,36 +1,62 @@
 {% extends "base.html" %}
 
+{% block title %}{{ taskgroup.name }} | To Do{% endblock title %}
+
 {% block content %}
-    <section aria-labelledby="project-heading">
-        <h1 id="project-heading">{{ taskgroup.name }}</h1>
-        {% if taskgroup.description %}
-            <p>{{ taskgroup.description }}</p>
-        {% endif %}
+<div class="dashboard">
+    {% with project_tasks=taskgroup.tasks.all %}
 
-        <p>
-            <a href="{% url 'task:create' taskgroup.pk %}">Add task</a>
-            <a href="{% url 'taskgroup:list' %}">Back to projects</a>
-        </p>
+    <p class="back-link">
+        <a href="{% url 'taskgroup:list' %}">&larr; Back to projects</a>
+    </p>
 
-        <h2>Tasks</h2>
-        {% with project_tasks=taskgroup.tasks.all %}
-            {% if project_tasks %}
-                <ul>
-                    {% for task in project_tasks %}
-                        <li>
-                            <a href="{% url 'task:detail' task.pk %}">{{ task.title }}</a>
-                            <span>{{ task.get_status_display }}</span>
-                            <a href="{% url 'task:edit' task.pk %}">Edit</a>
-                            <a href="{% url 'task:delete' task.pk %}">Delete</a>
-                            {% if task.description %}
-                                <p>{{ task.description }}</p>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>This project has no tasks yet.</p>
+    <section class="dashboard-header" aria-labelledby="project-heading">
+        <div>
+            <h1 id="project-heading">{{ taskgroup.name }}</h1>
+
+            {% if taskgroup.description %}
+                <p>{{ taskgroup.description }}</p>
             {% endif %}
-        {% endwith %}
+
+            <p class="project-meta">{{ project_tasks|length }} task{{ project_tasks|length|pluralize }}</p>
+        </div>
+
+        <a href="{% url 'task:create' taskgroup.pk %}" class="btn-primary">
+            + Add task
+        </a>
     </section>
+
+    <section class="task-list" aria-label="Tasks in this project">
+        {% for task in project_tasks %}
+            <article class="task-item {% if task.status == 'done' %}task-completed{% endif %}">
+                <div class="task-content">
+                    <h2>
+                        <a href="{% url 'task:detail' task.pk %}" class="project-link">{{ task.title }}</a>
+                    </h2>
+
+                    {% if task.description %}
+                        <p>{{ task.description }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="task-actions">
+                    <span class="status-badge status-{{ task.status }}">{{ task.get_status_display }}</span>
+                    <a href="{% url 'task:edit' task.pk %}" class="edit-button">Edit</a>
+                    <a href="{% url 'task:delete' task.pk %}" class="edit-button project-delete">Delete</a>
+                </div>
+            </article>
+        {% empty %}
+            <div class="empty-state">
+                <h2>No tasks yet!</h2>
+                <p>Add your first task to this project.</p>
+
+                <a href="{% url 'task:create' taskgroup.pk %}" class="btn-primary">
+                    + Add task
+                </a>
+            </div>
+        {% endfor %}
+    </section>
+
+    {% endwith %}
+</div>
 {% endblock content %}

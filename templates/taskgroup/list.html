@@ -3,32 +3,63 @@
 {% block title %}Projects | To Do{% endblock title %}
 
 {% block content %}
-    <section aria-labelledby="projects-heading">
-        <h1 id="projects-heading">Projects</h1>
-        <p>Task groups keep related tasks together.</p>
+<div class="dashboard">
 
-        <h2>Create a project</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Create project</button>
-        </form>
-
-        {% if taskgroups %}
-            <ul>
-                {% for taskgroup in taskgroups %}
-                    <li>
-                        <a href="{% url 'taskgroup:detail' taskgroup.pk %}">{{ taskgroup.name }}</a>
-                        <a href="{% url 'taskgroup:edit' taskgroup.pk %}">Edit</a>
-                        <a href="{% url 'taskgroup:delete' taskgroup.pk %}">Delete</a>
-                        {% if taskgroup.description %}
-                            <p>{{ taskgroup.description }}</p>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>You do not have any projects yet.</p>
-        {% endif %}
+    <section class="dashboard-header">
+        <div>
+            <h1 id="projects-heading">Projects</h1>
+            <p>Task groups keep related tasks together.</p>
+        </div>
     </section>
+
+    <section class="project-form-card" aria-labelledby="create-project-heading">
+        <h2 id="create-project-heading">Create a project</h2>
+
+        <form method="post" class="project-form">
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+
+            {% for field in form %}
+                <div class="form-field">
+                    {{ field.label_tag }}
+                    {{ field }}
+
+                    {% for error in field.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn-primary">Create project</button>
+        </form>
+    </section>
+
+    <section class="task-list" aria-label="Your projects">
+        {% for taskgroup in taskgroups %}
+            <article class="task-item">
+                <div class="task-content">
+                    <h2>
+                        <a href="{% url 'taskgroup:detail' taskgroup.pk %}" class="project-link">{{ taskgroup.name }}</a>
+                    </h2>
+
+                    {% if taskgroup.description %}
+                        <p>{{ taskgroup.description }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="task-actions">
+                    <a href="{% url 'taskgroup:detail' taskgroup.pk %}" class="edit-button">Open</a>
+                    <a href="{% url 'taskgroup:edit' taskgroup.pk %}" class="edit-button">Edit</a>
+                    <a href="{% url 'taskgroup:delete' taskgroup.pk %}" class="edit-button project-delete">Delete</a>
+                </div>
+            </article>
+        {% empty %}
+            <div class="empty-state">
+                <h2>No projects yet!</h2>
+                <p>Create your first project above to get started.</p>
+            </div>
+        {% endfor %}
+    </section>
+</div>
 {% endblock content %}

@@ -13,7 +13,7 @@
     <body
         class=""
     >
-                {% include "shell/navbar.html" %}
+                {% block navbar %}{% include "shell/navbar.html" %}{% endblock navbar %}
                 {% include "shell/messages.html" %}
 
                 <main class="">

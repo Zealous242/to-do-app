@@ -870,3 +870,229 @@ body {
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
+/* Sign out buttons styled like their link counterparts */
+
+.inline-form {
+    display: contents;
+}
+
+button.landing-login,
+button.landing-bottom-login,
+.footer-link-button {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+}
+
+button.landing-bottom-login {
+    border: 1px solid rgb(255 255 255 / 60%);
+}
+
+.footer-link-button {
+    color: inherit;
+    padding: 0;
+}
+
+/* Site navigation */
+
+.site-nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--background);
+    border-bottom: 1px solid var(--border);
+}
+
+.site-nav-inner {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    width: min(100% - 3rem, 1100px);
+    margin: 0 auto;
+    padding: 1.1rem 0;
+}
+
+.site-nav-brand {
+    color: var(--primary);
+    font-size: 1.65rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    text-decoration: none;
+}
+
+.site-nav-links,
+.site-nav-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.site-nav-actions {
+    margin-left: auto;
+    gap: 0.75rem;
+}
+
+.site-nav a,
+.site-nav-button {
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    color: var(--text);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.site-nav .site-nav-brand {
+    padding: 0;
+    border-radius: 0;
+    color: var(--primary);
+}
+
+.site-nav-links a:hover,
+.site-nav-actions a:hover,
+.site-nav-button:hover {
+    background: var(--surface-soft);
+}
+
+.site-nav-links a[aria-current="page"] {
+    background: var(--surface-soft);
+    color: var(--primary);
+}
+
+.site-nav-button {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+}
+
+.site-nav .site-nav-register {
+    background: var(--primary);
+    color: white;
+}
+
+.site-nav .site-nav-register:hover {
+    background: var(--primary-hover);
+}
+
+@media (max-width: 650px) {
+    .site-nav-inner {
+        width: min(100% - 2rem, 1100px);
+    }
+
+    .site-nav-links {
+        order: 3;
+        width: 100%;
+    }
+
+    .site-nav a,
+    .site-nav-button {
+        padding: 0.5rem 0.75rem;
+    }
+}
+/* Projects */
+
+.project-form-card {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+}
+
+.project-form-card h2 {
+    margin: 0 0 1.25rem;
+    font-size: 1.2rem;
+}
+
+.project-form input[type="text"],
+.project-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font: inherit;
+}
+
+.project-form label {
+    font-weight: 700;
+}
+
+.project-form .error {
+    color: var(--danger);
+    font-size: 0.9rem;
+}
+
+.project-form .helptext {
+    color: var(--muted);
+}
+
+.project-link {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.project-link:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.task-actions .edit-button {
+    padding: 0.5rem 0.75rem;
+}
+
+.task-actions .edit-button:hover {
+    background: var(--surface-soft);
+}
+
+.task-actions .project-delete {
+    color: var(--danger);
+}
+
+.project-form .btn-primary {
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+}
+
+/* Project detail */
+
+.back-link {
+    margin: 0 0 1.25rem;
+}
+
+.back-link a {
+    color: var(--muted);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.back-link a:hover {
+    color: var(--primary);
+}
+
+.project-meta {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.status-badge {
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    background: var(--surface-soft);
+    color: var(--primary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.task-completed .project-link {
+    color: var(--muted);
+    text-decoration: line-through;
+}
