@@ -721,3 +721,137 @@ body {
         flex-direction: column;
     }
 }
+
+/* ==================================================
+   LOGIN PAGE
+   ================================================== */
+
+.auth-page {
+    width: min(100% - 2rem, 460px);
+    margin: 0 auto;
+    padding: 3rem 0 5rem;
+}
+
+.auth-logo {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 3rem;
+    color: var(--primary);
+    font-size: 1.65rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    text-decoration: none;
+}
+
+.auth-card {
+    padding: 2.5rem;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+}
+
+.auth-heading {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.auth-heading h1 {
+    margin: 0 0 0.5rem;
+    font-size: 2rem;
+    letter-spacing: -0.03em;
+}
+
+.auth-heading p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.auth-form {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.auth-field {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.auth-field label {
+    font-weight: 700;
+}
+
+.auth-field input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+}
+
+.auth-field input:focus {
+    outline: 2px solid var(--surface-soft);
+    border-color: var(--primary);
+}
+
+.auth-submit {
+    width: 100%;
+    margin-top: 0.25rem;
+    padding: 0.85rem 1rem;
+    border: 0;
+    border-radius: 8px;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+}
+
+.auth-submit:hover {
+    background: var(--primary-hover);
+}
+
+.auth-back {
+    display: block;
+    width: fit-content;
+    margin: 1.5rem auto 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    text-decoration: none;
+}
+
+.auth-back:hover {
+    color: var(--primary);
+}
+
+.auth-errors {
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    background: #f8eeee;
+    color: var(--danger);
+}
+
+.auth-errors p,
+.auth-field-error {
+    margin: 0;
+}
+
+.auth-field-error {
+    color: var(--danger);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 500px) {
+    .auth-page {
+        padding-top: 2rem;
+    }
+
+    .auth-logo {
+        margin-bottom: 2rem;
+    }
+
+    .auth-card {
+        padding: 1.5rem;
+    }
+}
