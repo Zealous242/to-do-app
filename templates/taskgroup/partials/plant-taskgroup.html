@@ -1,0 +1,53 @@
+{% partialdef plant-task-group %}
+    <div class="border rounded-4 bg-body-tertiary p-4" data-tend-tasks>
+        <div class="d-flex justify-content-between align-items-baseline mb-3">
+            <p class="tend-display fs-4 mb-0">{{ taskgroup }}</p>
+            <!-- The 'x of y done' value is updated by JS -->
+            <p
+                class="small text-body-secondary mb-0"
+                aria-live="polite"
+                data-tend-count
+            >1 of 5 done</p>
+        </div>
+        <div class="row g-3 align-items-end">
+            <div class="col-5">
+                <svg
+                    class="tend-sprig d-block w-100 h-auto"
+                    aria-hidden="true"
+                    data-plant
+                    style="--stage:1"
+                    viewBox="0 0 120 200"
+                >
+                </svg>
+            </div>
+            <div class="col-7">
+                <ul class="list-unstyled mb-0 small">
+                    {% for task in taskgroup.tasks %}
+                        {% partial list-item %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endpartialdef plant-task-group %}
+
+
+{% partialdef list-item %}
+    <li class="py-2 border-top">
+        <label class="tend-task d-flex gap-2">
+            <span class="position-relative tend-mark">
+                <input
+                    class="form-check-input tend-check tend-mark d-block m-0 rounded-circle"
+                    checked
+                    type="checkbox"
+                >
+                <svg
+                    class="tend-leaf position-absolute top-0 start-0 w-100 h-100 text-primary pe-none"
+                    aria-hidden="true"
+                >
+                    <use href="#leaf" />
+                </svg>
+            </span><span>{{ task }}</span>
+        </label>
+    </li>
+{% endpartialdef list-item %}
