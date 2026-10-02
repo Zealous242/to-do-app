@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     # Third-party
     "allauth",
     "allauth.account",
+    "django_htmx",
     # Local
     "accounts.apps.AccountsConfig",
     "core.apps.CoreConfig",
@@ -37,6 +38,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "global_login_required.GlobalLoginRequiredMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 ROOT_URLCONF = "main.urls"
