@@ -1,10 +1,43 @@
-<nav aria-label="Main navigation" style="display: flex; align-items: center; gap: 1rem;">
-	<a href="{% url 'core:home' %}">Home</a>
-	<a href="{% url 'taskgroup:list' %}">Projects</a>
-	{% if user.is_authenticated %}
-		<form method="post" action="{% url 'account_logout' %}" style="margin-left: auto;">
-			{% csrf_token %}
-			<button type="submit">Log out</button>
-		</form>
-	{% endif %}
+{% comment %}
+<nav id="navbar" class="navbar navbar-expand-md sticky-top bg-body-primary border-bottom">
+  <div class="container">
+    <a class="navbar-brand font-display fs-4 text-primary" href="#top"><svg class="leaf me-1"><use href="#leaf"/></svg>Tend</a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto align-items-md-center gap-md-3">
+        <li class="nav-item"><a class="nav-link" href="{% url 'account_login'}">How it works</a></li>
+        <li class="nav-item"><a class="btn btn-primary btn-sm px-3 mt-2 mt-md-0" href="{% url 'account_signup' %}">Start Tending</a></li>
+      </ul>
+    </div>
+  </div>
 </nav>
+{% endcomment %}
+
+<header>
+    <nav class="navbar py-3" aria-label="Main">
+        <div class="container-xl px-4">
+            <a
+                class="navbar-brand d-flex align-items-center gap-2 tend-display fs-3 me-auto"
+                href="{% url 'core:home' %}"
+            >
+                <svg class="tend-mark text-primary" aria-hidden="true">
+                    <use href="#leaf" />
+                </svg>Tend
+            </a>
+            <ul class="navbar-nav flex-row align-items-center gap-3">
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a
+    class="btn btn-primary btn-sm rounded-pill px-3"
+    href="{% url 'accounts:dashboard' %}"
+>Account</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">Log in</a></li>
+                    <li class="nav-item"><a
+    class="btn btn-primary btn-sm rounded-pill px-3"
+    href="{% url 'account_signup' %}"
+>Start tending</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</header>
