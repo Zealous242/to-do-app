@@ -870,3 +870,325 @@ body {
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
+/* ==================================================
+   DASHBOARD ACTION BUTTONS
+   ================================================== */
+
+.task-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+/* Edit button */
+
+.edit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.edit-button:hover {
+    border-color: var(--primary);
+    background: var(--surface-soft);
+    color: var(--primary);
+}
+
+
+/* Delete button */
+
+.delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--surface);
+    color: var(--muted);
+    font: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    border-color: var(--danger);
+    background: #f8eeee;
+    color: var(--danger);
+}
+
+
+/* ==================================================
+   CREATE / EDIT TASK FORM
+   ================================================== */
+
+.task-form h1 {
+    margin: 0 0 2rem;
+    font-size: 2rem;
+    letter-spacing: -0.03em;
+}
+
+.task-form form {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.task-form .form-field {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.task-form label {
+    font-weight: 700;
+}
+
+.task-form input,
+.task-form textarea,
+.task-form select {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+}
+
+.task-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.task-form input:focus,
+.task-form textarea:focus,
+.task-form select:focus {
+    outline: 2px solid var(--surface-soft);
+    border-color: var(--primary);
+}
+
+
+/* Save / Create button */
+
+.task-form button[type="submit"] {
+    padding: 0.8rem 1.2rem;
+    border: 0;
+    border-radius: 8px;
+    background: var(--primary);
+    color: white;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.task-form button[type="submit"]:hover {
+    background: var(--primary-hover);
+}
+
+
+/* Cancel */
+
+.task-form .form-actions a,
+.task-form > a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.task-form .form-actions a:hover,
+.task-form > a:hover {
+    border-color: var(--primary);
+    background: var(--surface-soft);
+    color: var(--primary);
+}
+
+
+/* Edit form action row */
+
+.task-form .form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+
+/* ==================================================
+   DELETE CONFIRMATION MODAL
+   ================================================== */
+
+.modal-card {
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 60px rgb(0 0 0 / 18%);
+}
+
+.modal-card h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.5rem;
+}
+
+.modal-card p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+}
+
+.modal-actions > button {
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.modal-actions > button:hover {
+    background: var(--surface-soft);
+}
+
+.modal-actions .confirm-delete {
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--danger);
+    border-radius: 7px;
+    background: var(--danger);
+    color: white;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.modal-actions .confirm-delete:hover {
+    opacity: 0.9;
+}
+
+
+/* ==================================================
+   DASHBOARD ACTIONS - MOBILE
+   ================================================== */
+
+@media (max-width: 650px) {
+    .task-actions {
+        justify-content: flex-end;
+    }
+
+    .task-form .form-actions {
+        align-items: stretch;
+        flex-direction: column-reverse;
+    }
+
+    .task-form .form-actions a,
+    .task-form .form-actions button {
+        width: 100%;
+    }
+}
+
+/* ==================================================
+   DASHBOARD TOP BAR
+   ================================================== */
+
+.dashboard-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1.25rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.dashboard-logo {
+    color: var(--primary);
+    font-size: 1.65rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    text-decoration: none;
+}
+
+.dashboard-topbar form {
+    margin: 0;
+}
+
+.logout-button {
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    border-color: var(--primary);
+    background: var(--surface-soft);
+    color: var(--primary);
+}
+
+
+/* DASHBOARD HEADER */
+
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.dashboard-header h1 {
+    margin: 0 0 0.4rem;
+    font-size: 2rem;
+    letter-spacing: -0.03em;
+}
+
+.dashboard-header p {
+    margin: 0;
+    color: var(--muted);
+}
+
+
+/* MOBILE */
+
+@media (max-width: 650px) {
+    .dashboard-topbar {
+        margin-bottom: 2rem;
+    }
+
+    .dashboard-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .dashboard-header .btn-primary {
+        width: 100%;
+        text-align: center;
+    }
+}

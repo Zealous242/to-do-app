@@ -1,13 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}My Tasks | To Do{% endblock %}
+{% block title %}My Tasks | to-do{% endblock %}
 
 {% block content %}
 <div class="dashboard">
 
-    <div class="login-status">
-        You are logged in.
-    </div>
+    <header class="dashboard-topbar">
+        <a href="{% url 'accounts:dashboard' %}" class="dashboard-logo">
+            to-do
+        </a>
+
+        <form method="post" action="{% url 'account_logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">
+                Logout
+            </button>
+        </form>
+    </header>
 
     <section class="dashboard-header">
         <div>
