@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Edit {{ task.title }} | To Do{% endblock title %}
+
+{% block content %}
+    <section aria-labelledby="edit-task-heading">
+        <h1 id="edit-task-heading">Edit task</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save changes</button>
+            <a href="{% url 'taskgroup:detail' task.group_id %}">Cancel</a>
+        </form>
+    </section>
+{% endblock content %}

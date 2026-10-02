@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="task-form">
-    <h1>Create task</h1>
+    <h1>Create task in {{ taskgroup.name }}</h1>
 
     <form method="post">
         {% csrf_token %}
@@ -27,6 +27,6 @@
         <button type="submit">Create task</button>
     </form>
 
-    <a href="{% url 'accounts:dashboard' %}">Cancel</a>
+    <a href="{% url 'taskgroup:detail' taskgroup.pk %}">Cancel</a>
 </div>
 {% endblock %}

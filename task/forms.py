@@ -12,17 +12,12 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ["title", "group", "parent", "status", "description"]
+        fields = ["title", "parent", "status", "description"]
         widgets = {
             "title": forms.TextInput(
                 attrs={
                     "class": "form-control",
                     "placeholder": "Enter task title...",
-                }
-            ),
-            "group": forms.Select(
-                attrs={
-                    "class": "form-select",
                 }
             ),
             "parent": forms.Select(
@@ -44,12 +39,13 @@ class TaskForm(forms.ModelForm):
             ),
         }
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, taskgroup=None, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
-        # Set empty choice labels for dropdowns
+        # Limit parent choices to tasks in the current project.
         self.fields["parent"].empty_label = "None (Top-level Task)"
-        self.fields["group"].empty_label = "Select a Group"
+        if taskgroup is not None:
+            self.fields["parent"].queryset = Task.objects.filter(group=taskgroup)
 
         # Exclude current task from being selected as its own parent when editing
         if self.instance and self.instance.pk:

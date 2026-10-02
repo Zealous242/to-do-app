@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-    Task detail loads
+    <section aria-labelledby="task-heading">
+        <h1 id="task-heading">{{ task.title }}</h1>
+        <p>Status: {{ task.get_status_display }}</p>
+        {% if task.description %}
+            <p>{{ task.description }}</p>
+        {% endif %}
+        <p><a href="{% url 'taskgroup:detail' task.group_id %}">Back to project</a></p>
+    </section>
 {% endblock content %}
