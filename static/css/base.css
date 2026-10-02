@@ -855,3 +855,18 @@ body {
         padding: 1.5rem;
     }
 }
+/* Register page */
+
+.auth-page:has(form[action*="signup"]) {
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+}
+
+.auth-page:has(form[action*="signup"]) .auth-logo {
+    margin-bottom: 2rem;
+}
+
+.auth-page:has(form[action*="signup"]) .auth-card {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
