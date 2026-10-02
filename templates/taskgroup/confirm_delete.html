@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Delete {{ taskgroup.name }} | To Do{% endblock title %}
+
+{% block content %}
+    <section aria-labelledby="delete-project-heading">
+        <h1 id="delete-project-heading">Delete project</h1>
+        <p>Are you sure you want to delete “{{ taskgroup.name }}”?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Delete project</button>
+            <a href="{% url 'taskgroup:list' %}">Cancel</a>
+        </form>
+    </section>
+{% endblock content %}

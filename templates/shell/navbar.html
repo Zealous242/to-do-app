@@ -1,1 +1,10 @@
-<nav></nav>
+<nav aria-label="Main navigation" style="display: flex; align-items: center; gap: 1rem;">
+	<a href="{% url 'core:home' %}">Home</a>
+	<a href="{% url 'taskgroup:list' %}">Projects</a>
+	{% if user.is_authenticated %}
+		<form method="post" action="{% url 'account_logout' %}" style="margin-left: auto;">
+			{% csrf_token %}
+			<button type="submit">Log out</button>
+		</form>
+	{% endif %}
+</nav>
