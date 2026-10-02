@@ -1,1 +1,43 @@
-<footer></footer>
+
+{% comment %}
+    MESSAGE_TAGS in settings.py maps Django message levels to Bootstrap's
+    semantic alert names, so message.level_tag can be used directly in
+    the alert-{{ message.level_tag }} class and corresponding icon ID.
+
+    The message icons are defined as reusable SVG symbols in iconography.html,
+    which is included hidden in base.html so they are available throughout
+    the site.
+{% endcomment %}
+
+
+<div
+    id="message-container"
+    class="tend-messages position-fixed bottom-0 end-0 col-12 col-sm-6 col-lg-4 p-3 d-flex flex-column-reverse align-items-end gap-2 pe-none"
+    {% if hx_oob %}data-hx-swap-oob="beforeend"{% endif %}
+>
+    {% for message in messages %}
+        {% partial message_instance %}
+    {% endfor %}
+</div>
+
+
+{% partialdef message_instance %}
+    <dialog
+        class="position-static m-0 p-0 border-0 bg-transparent w-100 pe-auto"
+        closedby="closerequest"
+        open
+    >
+        <div
+            class="alert alert-{{ message.level_tag }} d-flex align-items-center gap-3 py-2 ps-3 pe-2 fw-medium"
+            role="{% if message.level_tag == 'danger' or message.level_tag == 'warning' %}alert{% else %}status{% endif %}"
+        >
+            <svg class="flex-shrink-0" aria-hidden="true" height="24" width="24">
+                <use href="#msg-{{ message.level_tag }}" />
+            </svg>
+            <p class="flex-grow-1 mb-0 text-break">{{ message }}</p>
+            <form method="dialog">
+                <button class="btn-close" aria-label="Dismiss message" type="submit"></button>
+            </form>
+        </div>
+    </dialog>
+{% endpartialdef message_instance %}
