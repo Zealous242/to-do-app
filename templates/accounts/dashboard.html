@@ -1,5 +1,174 @@
 {% extends "base.html" %}
 
+{% block title %}My Tasks | To Do{% endblock %}
+
 {% block content %}
-    Account dashboard loads
+<div class="dashboard">
+
+    <div class="login-status">
+        You are logged in.
+    </div>
+
+    <section class="dashboard-header">
+        <div>
+            <h1>Your tasks</h1>
+            <p>
+                {{ todo_count }} to do,
+                {{ completed_count }} completed
+            </p>
+        </div>
+
+        <a href="{% url 'task:create' %}" class="btn-primary">
+            + Add task
+        </a>
+    </section>
+
+    <nav class="task-filters" aria-label="Task filters">
+        <a
+            href="{% url 'accounts:dashboard' %}"
+            class="{% if selected_filter == 'all' %}active{% endif %}"
+        >
+            All ({{ total_count }})
+        </a>
+
+        <a
+            href="?filter=todo"
+            class="{% if selected_filter == 'todo' %}active{% endif %}"
+        >
+            To do ({{ todo_count }})
+        </a>
+
+        <a
+            href="?filter=completed"
+            class="{% if selected_filter == 'completed' %}active{% endif %}"
+        >
+            Completed ({{ completed_count }})
+        </a>
+    </nav>
+
+    <section class="task-list">
+        {% for task in tasks %}
+            <article
+                class="task-item {% if task.status == 'done' %}task-completed{% endif %}"
+            >
+                <div class="task-main">
+
+                    <form
+                        method="post"
+                        action="{% url 'task:toggle' task.pk %}"
+                        class="toggle-form"
+                    >
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="task-checkbox"
+                            aria-label="Toggle {{ task.title }}"
+                        >
+                            {% if task.status == 'done' %}
+                                ✓
+                            {% endif %}
+                        </button>
+                    </form>
+
+                    <div class="task-content">
+                        <h2>{{ task.title }}</h2>
+
+                        {% if task.description %}
+                            <p>{{ task.description }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="task-actions">
+                    <a
+                        href="{% url 'task:edit' task.pk %}"
+                        class="edit-button"
+                    >
+                        Edit
+                    </a>
+
+                    <button
+                        type="button"
+                        class="delete-button"
+                        data-delete-url="{% url 'task:delete' task.pk %}"
+                        data-task-title="{{ task.title }}"
+                    >
+                        🗑
+                        <span class="sr-only">Delete {{ task.title }}</span>
+                    </button>
+                </div>
+            </article>
+
+        {% empty %}
+            <div class="empty-state">
+                <h2>No tasks yet!</h2>
+                <p>Add your first task to get started.</p>
+
+                <a href="{% url 'task:create' %}" class="btn-primary">
+                    + Add task
+                </a>
+            </div>
+        {% endfor %}
+    </section>
+</div>
+
+
+<div
+    id="delete-modal"
+    class="modal"
+    hidden
+>
+    <div class="modal-card" role="dialog" aria-modal="true">
+        <h2>Delete task?</h2>
+
+        <p id="delete-message">
+            Are you sure you want to delete this task?
+        </p>
+
+        <div class="modal-actions">
+            <button type="button" id="cancel-delete">
+                Cancel
+            </button>
+
+            <form method="post" id="delete-form">
+                {% csrf_token %}
+                <button type="submit" class="confirm-delete">
+                    Delete
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock content %}
+
+
+{% block extra_js %}
+<script>
+    const modal = document.getElementById("delete-modal");
+    const deleteForm = document.getElementById("delete-form");
+    const deleteMessage = document.getElementById("delete-message");
+    const cancelDelete = document.getElementById("cancel-delete");
+
+    document.querySelectorAll(".delete-button").forEach((button) => {
+        button.addEventListener("click", () => {
+            deleteForm.action = button.dataset.deleteUrl;
+
+            deleteMessage.textContent =
+                `Are you sure you want to delete "${button.dataset.taskTitle}"?`;
+
+            modal.hidden = false;
+        });
+    });
+
+    cancelDelete.addEventListener("click", () => {
+        modal.hidden = true;
+    });
+
+    modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            modal.hidden = true;
+        }
+    });
+</script>
+{% endblock extra_js %}

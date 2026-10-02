@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Login | to-do{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+
+    <a href="{% url 'core:home' %}" class="auth-logo">
+        to-do
+    </a>
+
+    <div class="auth-card">
+        <div class="auth-heading">
+            <h1>Welcome back</h1>
+            <p>Login to access your tasks.</p>
+        </div>
+
+        <form method="post" action="{% url 'account_login' %}" class="auth-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="auth-errors">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="auth-field">
+                <label for="{{ form.login.id_for_label }}">Email</label>
+
+                <input
+                    type="email"
+                    name="{{ form.login.html_name }}"
+                    id="{{ form.login.id_for_label }}"
+                    value="{{ form.login.value|default:'' }}"
+                    autocomplete="email"
+                    placeholder="you@example.com"
+                    required
+                >
+
+                {% for error in form.login.errors %}
+                    <p class="auth-field-error">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="auth-field">
+                <label for="{{ form.password.id_for_label }}">Password</label>
+
+                <input
+                    type="password"
+                    name="{{ form.password.html_name }}"
+                    id="{{ form.password.id_for_label }}"
+                    autocomplete="current-password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+                {% for error in form.password.errors %}
+                    <p class="auth-field-error">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            {% if redirect_field_value %}
+                <input
+                    type="hidden"
+                    name="{{ redirect_field_name }}"
+                    value="{{ redirect_field_value }}"
+                >
+            {% endif %}
+
+            <button type="submit" class="auth-submit">
+                Login
+            </button>
+        </form>
+
+        <a href="{% url 'core:home' %}" class="auth-back">
+            ← Back to homepage
+        </a>
+    </div>
+
+</div>
+{% endblock content %}
