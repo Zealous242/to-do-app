@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Task | To Do{% endblock %}
+
+{% block content %}
+<div class="task-form">
+    <h1>Edit task</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        {% for field in form %}
+            <div class="form-field">
+                {{ field.label_tag }}
+                {{ field }}
+
+                {% for error in field.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <div class="form-actions">
+            <a href="{% url 'accounts:dashboard' %}">
+                Cancel
+            </a>
+
+            <button type="submit">
+                Save changes
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
