@@ -1,5 +1,171 @@
 {% extends "base.html" %}
 
+{% block title %}to-do{% endblock %}
+
 {% block content %}
-    Homepage loads
+<div class="landing-page">
+
+    <!-- Top navigation -->
+    <header class="landing-nav">
+        <a href="{% url 'core:home' %}" class="landing-logo">
+            to-do
+        </a>
+
+        <nav class="landing-nav-links" aria-label="Account navigation">
+            <a href="{% url 'account_login' %}" class="landing-login">
+                Login
+            </a>
+
+            <a href="{% url 'account_signup' %}" class="landing-register">
+                Register
+            </a>
+        </nav>
+    </header>
+
+
+    <!-- Main introduction -->
+    <section class="landing-hero">
+        <p class="landing-eyebrow">Simple task management</p>
+
+        <h1>
+            Organise your day.<br>
+            Keep track of your progress.
+        </h1>
+
+        <p class="landing-intro">
+            <strong>to-do</strong> gives you one simple place to manage
+            your tasks, stay organised, and see what you've completed.
+        </p>
+    </section>
+
+
+    <!-- Benefits -->
+    <section class="landing-benefits">
+        <div class="landing-section-heading">
+            <p class="landing-eyebrow">Why to-do?</p>
+            <h2>Stay organised. Get things done.</h2>
+        </div>
+
+        <div class="benefits-list">
+            <div class="benefit">
+                <span class="benefit-icon">✓</span>
+
+                <div>
+                    <h3>Everything in one place</h3>
+                    <p>
+                        Keep your tasks together instead of trying
+                        to remember everything.
+                    </p>
+                </div>
+            </div>
+
+            <div class="benefit">
+                <span class="benefit-icon">✓</span>
+
+                <div>
+                    <h3>Know what needs doing</h3>
+                    <p>
+                        See what is still on your list and what
+                        you've already completed.
+                    </p>
+                </div>
+            </div>
+
+            <div class="benefit">
+                <span class="benefit-icon">✓</span>
+
+                <div>
+                    <h3>See your progress</h3>
+                    <p>
+                        Mark tasks complete and keep track of what
+                        you've achieved.
+                    </p>
+                </div>
+            </div>
+
+            <div class="benefit">
+                <span class="benefit-icon">✓</span>
+
+                <div>
+                    <h3>Bring order to a busy day</h3>
+                    <p>
+                        Use a simple, systematic task list to stay
+                        focused when life gets busy.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- How it works -->
+    <section class="landing-how">
+        <div class="landing-section-heading">
+            <p class="landing-eyebrow">How it works</p>
+            <h2>Simple from the start.</h2>
+        </div>
+
+        <div class="how-grid">
+            <article class="how-card">
+                <span class="how-number">1</span>
+
+                <h3>Create your free account</h3>
+
+                <p>
+                    Register with your details and access your own
+                    personal task dashboard.
+                </p>
+            </article>
+
+            <article class="how-card">
+                <span class="how-number">2</span>
+
+                <h3>Add what you need to do</h3>
+
+                <p>
+                    Add your tasks so you always have a clear view
+                    of what needs your attention.
+                </p>
+            </article>
+
+            <article class="how-card">
+                <span class="how-number">3</span>
+
+                <h3>Keep track of your progress</h3>
+
+                <p>
+                    Complete tasks as you go and stay organised
+                    through your busy day.
+                </p>
+            </article>
+        </div>
+    </section>
+
+
+    <!-- Bottom account links -->
+    <section class="landing-bottom">
+        <h2>Keep your day organised with to-do.</h2>
+
+        <div class="landing-bottom-actions">
+            <a href="{% url 'account_login' %}" class="landing-bottom-login">
+                Login
+            </a>
+
+            <a href="{% url 'account_signup' %}" class="landing-bottom-register">
+                Register
+            </a>
+        </div>
+    </section>
+
+
+    <footer class="landing-footer">
+        <span class="landing-logo">to-do</span>
+
+        <div>
+            <a href="{% url 'account_login' %}">Login</a>
+            <a href="{% url 'account_signup' %}">Register</a>
+        </div>
+    </footer>
+
+</div>
 {% endblock content %}
