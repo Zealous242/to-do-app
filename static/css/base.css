@@ -149,6 +149,12 @@ body {
 .task-content h2 {
     margin: 0;
     font-size: 1.05rem;
+    color: inherit;
+    text-decoration: none;
+}
+
+.task-content h2 a:hover {
+    text-decoration: underline;
 }
 
 .task-content p {
@@ -158,6 +164,10 @@ body {
 
 .task-completed .task-content h2 {
     color: var(--muted);
+    text-decoration: line-through;
+}
+
+.task-completed .task-content h2 a {
     text-decoration: line-through;
 }
 
@@ -241,6 +251,154 @@ body {
     gap: 1rem;
 }
 
+/* ==================================================
+   TASK DETAIL
+   ================================================== */
+
+.task-detail {
+    width: min(100% - 2rem, 720px);
+    margin: 0 auto;
+    padding: 2rem 0 4rem;
+}
+
+.back-link {
+    color: var(--muted);
+    font-size: 0.95rem;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    color: var(--primary);
+}
+
+.task-detail-card {
+    margin-top: 1rem;
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+
+.task-detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.task-detail-header h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    overflow-wrap: anywhere;
+}
+
+.status-badge {
+    flex: 0 0 auto;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    background: var(--surface-soft);
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.status-badge.status-done {
+    background: var(--primary);
+    color: white;
+}
+
+.task-meta {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    gap: 0.6rem 1rem;
+    margin: 1.75rem 0;
+}
+
+.task-meta dt {
+    color: var(--muted);
+}
+
+.task-meta dd {
+    margin: 0;
+}
+
+.task-detail-section {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.task-detail-section + .task-detail-section {
+    margin-top: 1.5rem;
+}
+
+.task-detail-section h2 {
+    margin: 0 0 0.75rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.task-detail-section p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.subtask-list {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.subtask-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.task-detail a {
+    color: var(--primary);
+}
+
+.task-detail .btn-primary {
+    color: white;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.task-detail-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.task-detail-actions form {
+    margin: 0;
+}
+
+.btn-danger {
+    padding: 0.8rem 1.25rem;
+    border: 1px solid var(--danger);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--danger);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+}
+
+.btn-danger:hover {
+    background: var(--danger);
+    color: white;
+}
 
 /* ==================================================
    DJANGO MESSAGES
@@ -639,6 +797,19 @@ body {
         flex-direction: column-reverse;
     }
 }
+
+    .task-detail-card {
+        padding: 1.25rem;
+    }
+
+    .task-meta {
+        grid-template-columns: 1fr;
+        gap: 0.2rem;
+    }
+
+    .task-meta dd {
+        margin-bottom: 0.75rem;
+    }
 
 
 /* Landing page tablet */

@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from taskgroup.models import TaskGroup
 
@@ -40,6 +41,16 @@ class TaskCreateView(CreateView):
         messages.success(self.request, "Task created successfully.")
 
         return super().form_valid(form)
+    
+    
+class TaskDetailView(LoginRequiredMixin, DetailView):
+    model = Task
+    template_name = "task/task_detail.html"
+
+    def get_queryset(self):
+        return Task.objects.with_prefetched_children().select_related("group", "parent").filter(
+            group__user=self.request.user
+        )
 
 
 class TaskUpdateView(UserTaskMixin, UpdateView):

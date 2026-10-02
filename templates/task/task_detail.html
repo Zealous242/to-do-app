@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="task-detail">
+    <a href="{% url 'accounts:dashboard' %}" class="back-link">&larr; Back to tasks</a>
+
+    <article class="task-detail-card">
+        <header class="task-detail-header">
+            <h1>{{ task.title }}</h1>
+            <span class="status-badge {% if task.status == 'done' %}status-done{% endif %}">
+                {{ task.get_status_display }}
+            </span>
+        </header>
+
+        <dl class="task-meta">
+            <dt>Group</dt>
+            <dd>{{ task.group }}</dd>
+
+            {% if task.parent %}
+            <dt>Parent task</dt>
+            <dd><a href="{% url 'task:task_detail' task.parent.pk %}">{{ task.parent }}</a></dd>
+            {% endif %}
+
+            <dt>Created</dt>
+            <dd>{{ task.created_at|date:"j F Y, H:i" }}</dd>
+
+            <dt>Last updated</dt>
+            <dd>{{ task.updated_at|date:"j F Y, H:i" }}</dd>
+        </dl>
+
+        <section class="task-detail-section">
+            <h2>Description</h2>
+            {% if task.description %}
+                <p>{{ task.description|linebreaksbr }}</p>
+            {% else %}
+                <p class="muted">No description.</p>
+            {% endif %}
+        </section>
+
+        {% if task.subtasks.all %}
+        <section class="task-detail-section">
+            <h2>Subtasks</h2>
+            <ul class="subtask-list">
+                {% for subtask in task.subtasks.all %}
+                <li>
+                    <a href="{% url 'task:task_detail' subtask.pk %}">{{ subtask.title }}</a>
+                    <span class="muted">{{ subtask.get_status_display }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endif %}
+
+        <div class="task-detail-actions">
+            <a href="{% url 'task:edit' task.pk %}" class="btn-primary">Edit</a>
+
+            <form method="post" action="{% url 'task:delete' task.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-danger">Delete</button>
+            </form>
+        </div>
+    </article>
+</div>
+{% endblock %}

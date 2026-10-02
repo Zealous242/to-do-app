@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ task_list.name }}</h1>
+
+<h2>Done:</h2>
+    <ul>
+    {% for task in done_tasks %}
+    <li>
+        <a href="{% url 'task:task_detail' task.pk %}">
+        <s>{{ task.title }}</s>
+        </a>
+        | {{ task.deadline|default:"No deadline" }}
+        <span>{{ task.get_priority_display }}</span>
+        <form method="post" action="{% url 'task:toggle' task.pk %}" style="display:inline">
+        {% csrf_token %}<button type="submit">Undo</button>
+        </form>
+        <a href="{% url 'task:edit' task.pk %}">Edit</a>
+        <form method="post" action="{% url 'task:delete' task.pk %}" style="display:inline">
+        {% csrf_token %}<button type="submit">Delete</button>
+        </form>
+    </li>
+    {% empty %}
+    <li>Nothing completed yet.</li>
+    {% endfor %}
+    </ul>
+
+    <h2>Non done:</h2>
+    <ul>
+    {% for task in todo_tasks %}
+        <li>
+            <a href="{% url 'task:task_detail' task.pk %}">
+            {{ task.title }}
+            </a>
+            | {{ task.deadline|default:"No deadline" }}
+            <span>{{ task.get_priority_display }}</span>
+            <form method="post" action="{% url 'task:toggle' task.pk %}" style="display:inline">
+            {% csrf_token %}<button type="submit">Done</button>
+            </form>
+            <a href="{% url 'task:edit' task.pk %}">Edit</a>
+            <form method="post" action="{% url 'task:delete' task.pk %}" style="display:inline">
+            {% csrf_token %}<button type="submit">Delete</button>
+            </form>
+        </li>
+        {% empty %}
+        <li>Nothing left to do!</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Create New Task</h2>
+    <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add task</button>
+    </form>
+{% endblock %}
