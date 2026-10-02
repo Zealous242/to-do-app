@@ -68,6 +68,7 @@ LOGOUT_REDIRECT_URL = "/"
 # rather than applying the project's global login requirement.
 PUBLIC_PATHS = [
     r"^/auth/.*",
+    r"^/manage/.*",
     r"^/site-admin/.*",
 ]
 
