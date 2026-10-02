@@ -2,6 +2,8 @@
 
 from pathlib import Path
 
+from django.contrib import messages
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
@@ -17,6 +19,7 @@ INSTALLED_APPS = [
     # Third-party
     "allauth",
     "allauth.account",
+    "django_htmx",
     # Local
     "accounts.apps.AccountsConfig",
     "core.apps.CoreConfig",
@@ -35,6 +38,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "global_login_required.GlobalLoginRequiredMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 ROOT_URLCONF = "main.urls"
@@ -87,6 +91,11 @@ TEMPLATES = [
     },
 ]
 
+# Map message levels to alert classes for semantic styling
+MESSAGE_TAGS = {
+    messages.DEBUG: "secondary",
+    messages.ERROR: "danger",
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators

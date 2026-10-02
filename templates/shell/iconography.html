@@ -1,0 +1,97 @@
+<!-- Logo -->
+<svg hidden>
+    <symbol id="leaf" viewBox="0 0 24 24">
+    <path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15M5 19c3-5 6-8 10-10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+    </path>
+    </symbol>
+    <symbol id="leaf-l" viewBox="0 0 24 24">
+    <path d="M19 19c0-8-5-14-15-14 0 10 6 15 14 15M19 19c-3-5-6-8-10-10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+    </path>
+    </symbol>
+    <defs>
+    <path id="tend-petal" d="M0-3C-5.2-8-5.2-15 0-20C5.2-15 5.2-8 0-3Z" />
+    <path id="tend-petal-back" d="M0-3C-4.5-9-4.5-17 0-22C4.5-17 4.5-9 0-3Z" />
+    </defs>
+    <symbol id="sprout" viewBox="36 160 48 40">
+    <path d="M42 197h36M60 196V182" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" />
+    <use height="18" href="#leaf" width="18" x="56.4" y="167.6" />
+    <use height="18" href="#leaf-l" width="18" x="45.8" y="167.6" />
+    </symbol>
+</svg>
+
+<!-- Growing plant -->
+<template id="tend-plant">
+    <svg>
+        <path d="M42 197h36" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" />
+        <path class="tend-stem" d="M60 196C60 150 56 100 62 20" pathLength="1" />
+        <use class="tend-sprout" height="40" href="#sprout" width="48" x="36" y="160" />
+        <g class="tend-part" style="--min:1;transform-origin:60px 168px">
+        <use height="34" href="#leaf" width="34" x="53" y="141" />
+        </g>
+        <g class="tend-part" style="--min:1;transform-origin:59px 138px">
+        <use height="34" href="#leaf-l" width="34" x="32" y="111" />
+        </g>
+        <g class="tend-part" style="--min:2;transform-origin:59px 104px">
+        <use height="30" href="#leaf" width="30" x="53" y="80" />
+        </g>
+        <g class="tend-part" style="--min:3;transform-origin:59px 76px">
+        <use height="26" href="#leaf-l" width="26" x="38.5" y="55" />
+        </g>
+        <g class="tend-part tend-bloom tend-petals" style="--min:5;transform-origin:62px 20px">
+        <use href="#tend-petal-back" transform="translate(62 20) rotate(22.5)" />
+        <use href="#tend-petal-back" transform="translate(62 20) rotate(67.5)" />
+        <use href="#tend-petal-back" transform="translate(62 20) rotate(112.5)" />
+        <use href="#tend-petal-back" transform="translate(62 20) rotate(157.5)" />
+        <use href="#tend-petal-back" transform="translate(62 20) rotate(202.5)" />
+        <use href="#tend-petal-back" transform="translate(62 20) rotate(247.5)" />
+        <use href="#tend-petal-back" transform="translate(62 20) rotate(292.5)" />
+        <use href="#tend-petal-back" transform="translate(62 20) rotate(337.5)" />
+        </g>
+        <g class="tend-part tend-front tend-petals" style="--min:4;transform-origin:62px 20px">
+        <use href="#tend-petal" transform="translate(62 20) rotate(0)" />
+        <use href="#tend-petal" transform="translate(62 20) rotate(45)" />
+        <use href="#tend-petal" transform="translate(62 20) rotate(90)" />
+        <use href="#tend-petal" transform="translate(62 20) rotate(135)" />
+        <use href="#tend-petal" transform="translate(62 20) rotate(180)" />
+        <use href="#tend-petal" transform="translate(62 20) rotate(225)" />
+        <use href="#tend-petal" transform="translate(62 20) rotate(270)" />
+        <use href="#tend-petal" transform="translate(62 20) rotate(315)" />
+        <circle cx="62" cy="20" r="4.5" />
+        <circle cx="62" cy="20" fill="currentColor" r="1.5" stroke="none" />
+        </g>
+    </svg>
+</template>
+
+<!-- Message icons -->
+<svg hidden>
+    <!-- Success reuses logo leaf -->
+    <symbol id="msg-success" viewBox="0 0 24 24">
+    <use href="#leaf" />
+    </symbol>
+    <symbol id="msg-info" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 11v5M12 8h.01" />
+    </g>
+    </symbol>
+    <symbol id="msg-secondary" viewBox="0 0 24 24">
+    <use href="#msg-info" />
+    </symbol>
+    <symbol id="msg-warning" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+    <path d="M12 4.5 3.5 19h17z" />
+    <path d="M12 10v4.5M12 16.8h.01" />
+    </g>
+    </symbol>
+    <symbol id="msg-danger" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 7.5v5M12 16h.01" />
+    </g>
+    </symbol>
+</svg>
+
+<!-- Left arrow -->
+<symbol id="arrow-left" viewBox="0 0 24 24">
+<path d="M19 12H5m6-6-6 6 6 6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+</symbol>

@@ -8,22 +8,44 @@
     - status_code: HTTP status code
 
     Optional:
-    - title: Error type title | Default: "Something went wrong"
+    - title: Error type title | Default: "Oops, something went wrong."
     - message: Error message | Default: "An unexpected error occurred while processing your request."
     - link_endpoint: URL endpoint for the link button | Default: "core:home".
     - link_btn_text: Label for the link button | Default: "Back to homepage".
+
 {% endcomment %}
 
-{% block title %}Error {{ status_code }} | To Do App{% endblock %}
+{% block title %}Error {{ status_code }} | Tend{% endblock %}
 
 {% block content %}
-{% firstof link_endpoint "core:home" as target_endpoint %}
-<h1>{{ status_code }}</h1>
-            <p class="">{{ title|default:"Oops, something went wrong." }}</p>
+    {% firstof link_endpoint "core:home" as target_endpoint %}
 
-                <p>{{ message|default:"An unexpected error occurred while processing your request." }}</p>
-<a
-                    class=""
-                    href="{% url target_endpoint %}">{{ link_btn_text|default:"Back to homepage" }}</a>
+    <section
+        class="tend-section container-xl px-4 d-flex flex-column justify-content-center flex-grow-1"
+    >
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 text-center">
+                <svg class="text-primary mb-3" aria-hidden="true" height="60" width="72">
+                    <use href="#sprout" />
+                </svg>
 
+                <h1 class="tend-display display-1 mb-3">
+                    <span class="visually-hidden">Error </span>{{ status_code }}
+                </h1>
+                <p class="tend-display fs-3 mb-2">{{ title|default:"Oops, something went wrong." }}</p>
+                <p class="text-body-secondary mb-5">
+                    {{ message|default:"An unexpected error occurred while processing your request." }}
+                </p>
+
+                <a
+                    class="btn btn-primary btn-lg rounded-pill px-4 d-inline-flex align-items-center gap-2"
+                    href="{% url target_endpoint %}"
+                >
+                    <svg aria-hidden="true" height="18" width="18">
+                        <use href="#arrow-left" />
+                    </svg>{{ link_btn_text|default:"Back to homepage" }}
+                </a>
+            </div>
+        </div>
+    </section>
 {% endblock content %}

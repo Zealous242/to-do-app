@@ -1191,4 +1191,337 @@ body {
         width: 100%;
         text-align: center;
     }
+}:root, [data-bs-theme="light"] {
+    --leaf-on-primary: #fff;
+    color: var(--bs-body-color);
+    --bs-body-bg: #f1f4ec;
+    --bs-body-color: #1e2b22;
+    --bs-secondary-color: #5a6b5e;
+    --bs-tertiary-bg: #ebeed8;
+    --bs-tertiary-bg-rgb: 235, 238, 216;
+    --bs-border-color: #d3d9c0;
+    --bs-primary: #5b6d33;
+    --bs-primary-rgb: 91, 109, 51;
+    --bs-primary-text-emphasis: #435226;
+    --bs-primary-border-subtle: #c9d1a6;
+    --bs-primary-bg-subtle: #dfe5c6;
+    --bs-link-color: var(--bs-primary);
+    --bs-link-color-rgb: var(--bs-primary-rgb);
+    --bs-link-hover-color: #435226;
+    --bs-border-radius: .75rem;
+    --bs-border-radius-lg: 1.25rem;
+    --bs-body-font-family: "Instrument Sans", system-ui, sans-serif;
+    --bs-body-line-height: 1.65;
+    --leaf-display: "Newsreader", Georgia, serif;
+    /* Feedback colours */
+    --bs-success: #4b7a3d;
+    --bs-success-rgb: 75, 122, 61;
+    --bs-success-text-emphasis: #2d4d26;
+    --bs-success-bg-subtle: #e1ecd3;
+    --bs-success-border-subtle: #c5d9b1;
+
+    --bs-info: #4b6a73;
+    --bs-info-rgb: 75, 106, 115;
+    --bs-info-text-emphasis: #2f4a52;
+    --bs-info-bg-subtle: #e1eaea;
+    --bs-info-border-subtle: #c3d4d5;
+
+    --bs-warning: #a47318;
+    --bs-warning-rgb: 164, 115, 24;
+    --bs-warning-text-emphasis: #6b4a0f;
+    --bs-warning-bg-subtle: #f4ead0;
+    --bs-warning-border-subtle: #e6d5a5;
+
+    --bs-danger: #a4472f;
+    --bs-danger-rgb: 164, 71, 47;
+    --bs-danger-text-emphasis: #7a2f1d;
+    --bs-danger-bg-subtle: #f5ddd3;
+    --bs-danger-border-subtle: #e8c2b3;
+
+    --bs-secondary: #5a6b5e;
+    --bs-secondary-rgb: 90, 107, 94;
+    --bs-secondary-text-emphasis: #3a473d;
+    --bs-secondary-bg-subtle: #e9ece0;
+    --bs-secondary-border-subtle: var(--bs-border-color);
+}
+[data-bs-theme="dark"] {
+    --leaf-on-primary: #11190f;
+    color: var(--bs-body-color);
+    --bs-body-bg: #111a14;
+    --bs-body-color: #e2eadf;
+    --bs-secondary-color: #9aab9e;
+    --bs-tertiary-bg: #1b2518;
+    --bs-tertiary-bg-rgb: 27, 37, 24;
+    --bs-border-color: #323c28;
+    --bs-primary: #a9ba7a;
+    --bs-primary-rgb: 169, 186, 122;
+    --bs-primary-text-emphasis: #c4d29a;
+    --bs-primary-border-subtle: #3a4529;
+    --bs-primary-bg-subtle: #232c1b;
+    --bs-link-hover-color: #c4d29a;
+    /* Feedback colours */
+    --bs-success: #8dbb7c;
+    --bs-success-rgb: 141, 187, 124;
+    --bs-success-text-emphasis: #b5d6a4;
+    --bs-success-bg-subtle: #1d2a1b;
+    --bs-success-border-subtle: #2f4a2b;
+
+    --bs-info: #8db3bd;
+    --bs-info-rgb: 141, 179, 189;
+    --bs-info-text-emphasis: #b3d0d8;
+    --bs-info-bg-subtle: #1a272b;
+    --bs-info-border-subtle: #2c4349;
+
+    --bs-warning: #d7a64a;
+    --bs-warning-rgb: 215, 166, 74;
+    --bs-warning-text-emphasis: #e8c887;
+    --bs-warning-bg-subtle: #2b2415;
+    --bs-warning-border-subtle: #4a3a1a;
+
+    --bs-danger: #d9826a;
+    --bs-danger-rgb: 217, 130, 106;
+    --bs-danger-text-emphasis: #eaa896;
+    --bs-danger-bg-subtle: #2e1b16;
+    --bs-danger-border-subtle: #55291f;
+
+    --bs-secondary: #9aab9e;
+    --bs-secondary-rgb: 154, 171, 158;
+    --bs-secondary-text-emphasis: #c3cfc5;
+    --bs-secondary-bg-subtle: #1f2a22;
+    --bs-secondary-border-subtle: var(--bs-border-color);
+
+}
+:root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    --sans: "Instrument Sans", -apple-system, Blink;
+}
+html {
+    scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 4.5rem);
+    scroll-behavior: smooth;
+    scrollbar-color: var(--bs-secondary-color) var(--bs-body-bg);
+    scrollbar-width: auto;
+}
+body {
+    background: var(--bs-body-bg);
+    margin: 0;
+    font-family: var(--sans);
+    line-height: 1.5;
+}
+h1, h2, h3, h4, .font-display {
+    font-family: var(--leaf-display);
+    font-weight: 400;
+    letter-spacing: -.015em;
+    line-height: 1.12;
+}
+.lede {
+    max-width: 34rem;
+    font-size: 1.125rem;
+    color: var(--bs-secondary-color);
+}
+.leaf {
+    width: 1.25em;
+    height: 1.25em;
+    vertical-align: -.2em;
+}
+#navbar {
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    background-color: hsl(var(--bs-border-color) 0.9, transparent);
+}
+
+/* Bootstrap components, retinted through their own variables */
+.sticky-top {
+    top: env(safe-area-inset-top, 0px);
+}
+
+.btn-primary {
+    --bs-btn-color: var(--leaf-on-primary);
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-color: var(--leaf-on-primary);
+    --bs-btn-hover-bg: var(--bs-link-hover-color);
+    --bs-btn-hover-border-color: var(--bs-link-hover-color);
+    --bs-btn-active-color: var(--leaf-on-primary);
+    --bs-btn-active-bg: var(--bs-link-hover-color);
+    --bs-btn-active-border-color: var(--bs-link-hover-color);
+    --bs-btn-focus-shadow-rgb: var(--bs-primary-rgb);
+    --bs-btn-font-weight: 500;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-color: var(--leaf-on-primary);
+    --bs-btn-hover-bg: var(--bs-primary);
+    --bs-btn-hover-border-color: var(--bs-primary);
+    --bs-btn-active-color: var(--leaf-on-primary);
+    --bs-btn-active-bg: var(--bs-primary);
+    --bs-btn-active-border-color: var(--bs-primary);
+}
+.nav-pills {
+    --bs-nav-pills-link-active-bg: var(--bs-primary);
+    --bs-nav-pills-link-active-color: var(--leaf-on-primary);
+    --bs-nav-link-color: var(--bs-secondary-color);
+    --bs-nav-link-hover-color: var(--bs-body-color);
+}
+.accordion {
+    --bs-accordion-bg: transparent;
+    --bs-accordion-active-bg: var(--bs-tertiary-bg);
+    --bs-accordion-active-color: var(--bs-body-color);
+    --bs-accordion-border-color: var(--bs-border-color);
+    --bs-accordion-btn-focus-box-shadow: 0 0 0 .25rem rgba(var(--bs-primary-rgb), .25);
+}
+.accordion-button {
+    font-family: var(--leaf-display);
+    font-size: 1.2rem;
+}
+.form-check-input:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 .25rem rgba(var(--bs-primary-rgb), .25);
+}
+.form-check-input:checked + .form-check-label {
+    color: var(--bs-secondary-color);
+    text-decoration: line-through;
+    text-decoration-color: var(--bs-primary);
+}
+.progress {
+    --bs-progress-bg: var(--bs-tertiary-bg);
+    --bs-progress-bar-bg: var(--bs-primary);
+}
+.card {
+    --bs-card-bg: var(--bs-tertiary-bg);
+    --bs-card-border-color: transparent;
+}
+
+/* Fixed message stack */
+
+#message-container {
+    z-index: 1090;
+}
+/* Message styles */
+
+.alert {
+    --bs-alert-border-radius: var(--bs-border-radius-lg);
+    --bs-alert-margin-bottom: 0;
+}
+
+.alert .btn-close {
+    --bs-btn-close-focus-shadow: 0 0 0 .2rem rgba(var(--bs-primary-rgb), .35);
+    position: relative;
+    background: none;
+    filter: none;
+    opacity: .65;
+}
+.alert .btn-close::before {
+    content: "";
+    position: absolute;
+    inset: .25em;
+    background: currentColor;
+    -webkit-mask: var(--bs-btn-close-bg) center / 100% no-repeat;
+    mask: var(--bs-btn-close-bg) center / 100% no-repeat;
+}
+.alert .btn-close:hover,
+.alert .btn-close:focus-visible {
+    opacity: 1;
+}
+
+/* Tend specific components */
+.tend-display {
+    font-family: var(--leaf-display);
+    font-weight: 400;
+    letter-spacing: -.02em;
+    line-height: 1.1
+}
+.tend-section {
+    padding-block: clamp(4rem, 10vw, 8rem)
+}
+.tend-mark {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none
+}
+
+/* Growth visual: --stage (0-5) drives the stem, leaves and flower. A part shows once --stage >= its --min. */
+.tend-sprig {
+    color: var(--bs-primary);
+    overflow: visible
+}
+.tend-stem {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: max(0, calc(.68 - .17 * var(--stage)), calc(.92 - .41 * var(--stage)));
+    transition: stroke-dashoffset .8s ease
+}
+.tend-part {
+    --g: calc(var(--stage) - var(--min) + 1);
+    opacity: clamp(0, var(--g), 1);
+    transform: scale(clamp(.6, calc(.45 + .15 * var(--g)), 1));
+    transition: opacity .6s ease, transform .8s ease;
+    transition-delay: .15s
+}
+.tend-sprout {
+    opacity: clamp(0, calc(1 - var(--stage)), 1);
+    transition: opacity .5s ease
+}
+.tend-bloom {
+    transform: scale(clamp(.3, calc(.3 + .7 * var(--g)), 1))
+}
+.tend-front {
+    transform: scale(clamp(.1, calc(.1 + .45 * var(--g)), 1))
+}
+/* Petals are filled with the surface colour so front petals hide the back ones */
+.tend-sprig {
+    --tend-fill: var(--bs-tertiary-bg)
+}
+.bg-primary-subtle .tend-sprig {
+    --tend-fill: var(--bs-primary-bg-subtle)
+}
+.tend-petals {
+    fill: var(--tend-fill);
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linejoin: round;
+    stroke-linecap: round
+}
+
+/* Circle -> leaf task check box */
+.tend-task {
+    cursor: pointer
+}
+.tend-task:has(:checked) {
+    color: var(--bs-secondary-color)
+}
+.tend-check {
+    border-color: var(--bs-secondary-color);
+    background-color: transparent;
+    cursor: pointer
+}
+.form-check-input.tend-check:checked[type=checkbox] {
+    background-image: none;
+    background-color: transparent;
+    border-color: transparent
+}
+.form-check-input.tend-check:focus {
+    border-color: var(--bs-secondary-color);
+    box-shadow: none
+}
+.form-check-input.tend-check:focus-visible {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 .25rem rgba(var(--bs-primary-rgb), .3)
+}
+.tend-check + .tend-leaf {
+    transition: opacity .3s ease
+}
+.tend-check:not(:checked) + .tend-leaf {
+    opacity: 0
+}
+@media (prefers-reduced-motion:reduce) {
+    .tend-stem, .tend-part, .tend-sprout, .tend-leaf {
+        transition: none
+    }
 }

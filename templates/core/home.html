@@ -3,173 +3,210 @@
 {% block title %}to-do{% endblock %}
 
 {% block content %}
-<div class="landing-page">
-
-    <!-- Top navigation -->
-    <header class="landing-nav">
-        <a href="{% url 'core:home' %}" class="landing-logo">
-            to-do
-        </a>
-
-        <nav class="landing-nav-links" aria-label="Account navigation">
-            <a href="{% url 'account_login' %}" class="landing-login">
-                Login
-            </a>
-
-            <a href="{% url 'account_signup' %}" class="landing-register">
-                Register
-            </a>
-
-            <a href="{% url 'manage:login' %}" class="landing-register">
-                Manager Login
-            </a>
-        </nav>
-    </header>
-
-
-    <!-- Main introduction -->
-    <section class="landing-hero">
-        <p class="landing-eyebrow">Simple task management</p>
-
-        <h1>
-            Organise your day.<br>
-            Keep track of your progress.
-        </h1>
-
-        <p class="landing-intro">
-            <strong>to-do</strong> gives you one simple place to manage
-            your tasks, stay organised, and see what you've completed.
-        </p>
-    </section>
-
-
-    <!-- Benefits -->
-    <section class="landing-benefits">
-        <div class="landing-section-heading">
-            <p class="landing-eyebrow">Why to-do?</p>
-            <h2>Stay organised. Get things done.</h2>
-        </div>
-
-        <div class="benefits-list">
-            <div class="benefit">
-                <span class="benefit-icon">✓</span>
-
-                <div>
-                    <h3>Everything in one place</h3>
-                    <p>
-                        Keep your tasks together instead of trying
-                        to remember everything.
-                    </p>
+    <!-- Hero -->
+    <section class="tend-section pt-4 pt-lg-5" aria-labelledby="hero-title">
+        <div class="container-xl px-4">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-7">
+                    <h1 id="hero-title" class="tend-display display-3 mb-4">
+                        Small things.
+                        <span class="d-block text-primary">Steady growth.</span>
+                    </h1>
+                    <p class="lead text-body-secondary mb-5">Tend to what matters, one task at a time.</p>
+                    <div class="d-flex flex-wrap align-items-center gap-3">
+                        <a class="btn btn-primary btn-lg rounded-pill px-4" href="#">Start tending</a>
+                        <a class="btn btn-link" href="#story">Why Tend</a>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <!-- data-tend-tasks marks a task list: the script wires every checkbox, plant and count inside it -->
+                    <div class="border rounded-4 bg-body-tertiary p-4" data-tend-tasks>
+                        <div class="d-flex justify-content-between align-items-baseline mb-3">
+                            <p class="tend-display fs-4 mb-0">Today</p>
+                            <p class="small text-body-secondary mb-0" aria-live="polite" data-tend-count>1 of 5 done</p>
+                        </div>
+                        <div class="row g-3 align-items-end">
+                            <div class="col-5">
+                                <svg class="tend-sprig d-block w-100 h-auto" aria-hidden="true" data-plant style="--stage:1"
+                                    viewBox="0 0 120 200">
+                                </svg>
+                            </div>
+                            <div class="col-7">
+                                <ul class="list-unstyled mb-0 small">
+                                    <li class="py-2 border-top">
+                                        <label class="tend-task d-flex gap-2">
+                                            <span class="position-relative tend-mark">
+                                                <input
+                                                    class="form-check-input tend-check tend-mark d-block m-0 rounded-circle"
+                                                    checked type="checkbox">
+                                                <svg class="tend-leaf position-absolute top-0 start-0 w-100 h-100 text-primary pe-none"
+                                                    aria-hidden="true">
+                                                    <use href="#leaf" />
+                                                </svg>
+                                            </span><span>Water the basil</span>
+                                        </label>
+                                    </li>
+                                    <li class="py-2 border-top">
+                                        <label class="tend-task d-flex gap-2">
+                                            <span class="position-relative tend-mark">
+                                                <input
+                                                    class="form-check-input tend-check tend-mark d-block m-0 rounded-circle"
+                                                    type="checkbox">
+                                                <svg class="tend-leaf position-absolute top-0 start-0 w-100 h-100 text-primary pe-none"
+                                                    aria-hidden="true">
+                                                    <use href="#leaf" />
+                                                </svg>
+                                            </span><span>Reply to Marit about the garden plot</span>
+                                        </label>
+                                    </li>
+                                    <li class="py-2 border-top">
+                                        <label class="tend-task d-flex gap-2">
+                                            <span class="position-relative tend-mark">
+                                                <input
+                                                    class="form-check-input tend-check tend-mark d-block m-0 rounded-circle"
+                                                    type="checkbox">
+                                                <svg class="tend-leaf position-absolute top-0 start-0 w-100 h-100 text-primary pe-none"
+                                                    aria-hidden="true">
+                                                    <use href="#leaf" />
+                                                </svg>
+                                            </span><span>Book the dentist</span>
+                                        </label>
+                                    </li>
+                                    <li class="py-2 border-top">
+                                        <label class="tend-task d-flex gap-2">
+                                            <span class="position-relative tend-mark">
+                                                <input
+                                                    class="form-check-input tend-check tend-mark d-block m-0 rounded-circle"
+                                                    type="checkbox">
+                                                <svg class="tend-leaf position-absolute top-0 start-0 w-100 h-100 text-primary pe-none"
+                                                    aria-hidden="true">
+                                                    <use href="#leaf" />
+                                                </svg>
+                                            </span><span>Walk by the canal</span>
+                                        </label>
+                                    </li>
+                                    <li class="py-2 border-top">
+                                        <label class="tend-task d-flex gap-2">
+                                            <span class="position-relative tend-mark">
+                                                <input
+                                                    class="form-check-input tend-check tend-mark d-block m-0 rounded-circle"
+                                                    type="checkbox">
+                                                <svg class="tend-leaf position-absolute top-0 start-0 w-100 h-100 text-primary pe-none"
+                                                    aria-hidden="true">
+                                                    <use href="#leaf" />
+                                                </svg>
+                                            </span><span>Finish the quarterly summary</span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div class="benefit">
-                <span class="benefit-icon">✓</span>
-
-                <div>
-                    <h3>Know what needs doing</h3>
-                    <p>
-                        See what is still on your list and what
-                        you've already completed.
-                    </p>
-                </div>
-            </div>
-
-            <div class="benefit">
-                <span class="benefit-icon">✓</span>
-
-                <div>
-                    <h3>See your progress</h3>
-                    <p>
-                        Mark tasks complete and keep track of what
-                        you've achieved.
-                    </p>
-                </div>
-            </div>
-
-            <div class="benefit">
-                <span class="benefit-icon">✓</span>
-
-                <div>
-                    <h3>Bring order to a busy day</h3>
-                    <p>
-                        Use a simple, systematic task list to stay
-                        focused when life gets busy.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- How it works -->
-    <section class="landing-how">
-        <div class="landing-section-heading">
-            <p class="landing-eyebrow">How it works</p>
-            <h2>Simple from the start.</h2>
-        </div>
-
-        <div class="how-grid">
-            <article class="how-card">
-                <span class="how-number">1</span>
-
-                <h3>Create your free account</h3>
-
-                <p>
-                    Register with your details and access your own
-                    personal task dashboard.
-                </p>
-            </article>
-
-            <article class="how-card">
-                <span class="how-number">2</span>
-
-                <h3>Add what you need to do</h3>
-
-                <p>
-                    Add your tasks so you always have a clear view
-                    of what needs your attention.
-                </p>
-            </article>
-
-            <article class="how-card">
-                <span class="how-number">3</span>
-
-                <h3>Keep track of your progress</h3>
-
-                <p>
-                    Complete tasks as you go and stay organised
-                    through your busy day.
-                </p>
-            </article>
         </div>
     </section>
 
-
-    <!-- Bottom account links -->
-    <section class="landing-bottom">
-        <h2>Keep your day organised with to-do.</h2>
-
-        <div class="landing-bottom-actions">
-            <a href="{% url 'account_login' %}" class="landing-bottom-login">
-                Login
-            </a>
-
-            <a href="{% url 'account_signup' %}" class="landing-bottom-register">
-                Register
-            </a>
+    <!-- Features -->
+    <section
+        class="tend-section bg-body-tertiary"
+        aria-labelledby="features-title"
+        data-bs-theme="light"
+    >
+        <div class="container-xl px-4">
+            <div class="row g-5">
+                <div class="col-lg-4">
+                    <h2 id="features-title" class="tend-display display-5">A simpler way to keep track.</h2>
+                </div>
+                <div class="col-lg-8">
+                    <article class="row gx-0 border-top py-4 py-lg-5">
+                        <h3 class="col-md-6 tend-display fs-3 pe-md-4">No more endless lists.</h3>
+                        <p class="col-md-6 text-body-secondary mb-0">Keep the things you're working on together.</p>
+                    </article>
+                    <article class="row gx-0 border-top py-4 py-lg-5">
+                        <h3 class="col-md-6 tend-display fs-3 pe-md-4">Progress should feel like progress.</h3>
+                        <p class="col-md-6 text-body-secondary mb-0">See your work grow as you complete it.</p>
+                    </article>
+                    <article class="row gx-0 border-top border-bottom py-4 py-lg-5">
+                        <h3 class="col-md-6 tend-display fs-3 pe-md-4">Tend to one thing at a time.</h3>
+                        <p class="col-md-6 text-body-secondary mb-0">Let the little things add up.</p>
+                    </article>
+                </div>
+            </div>
         </div>
     </section>
 
-
-    <footer class="landing-footer">
-        <span class="landing-logo">to-do</span>
-
-        <div>
-            <a href="{% url 'account_login' %}">Login</a>
-            <a href="{% url 'account_signup' %}">Register</a>
+    <!-- Philosophy -->
+    <section
+        id="story"
+        class="tend-section bg-primary-subtle"
+        aria-labelledby="story-title"
+    >
+        <div class="container-xl px-4">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6">
+                    <h2 id="story-title" class="tend-display display-4 mb-4">Things don't get done all at once.</h2>
+                    <p>A home gets sorted one drawer at a time. A trip gets planned one booking at a time. A new skill gets learned one small step at a time.</p>
+                    <p>Tend is built around that idea.</p>
+                    <p class="mb-5">Keep the little tasks that belong together in one place. Work through them at your own pace. As you do, something grows — a small visual reminder that those seemingly insignificant tasks are actually taking you somewhere.</p>
+                    <p class="tend-display fs-4 mb-2">No streaks. No scores. No pressure to optimise every minute.</p>
+                    <p
+                        class="tend-display fs-4 fst-italic text-primary mb-0"
+                    >Just a little progress, tended regularly.</p>
+                </div>
+                <div class="col-lg-5 offset-lg-1">
+                    <div class="row g-0 align-items-end">
+                        <div class="col-3">
+                            <svg
+                                class="tend-sprig d-block w-100 h-auto"
+                                aria-hidden="true"
+                                style="--stage:1"
+                                viewBox="0 0 120 200"
+                            >
+                            </svg>
+                            <p class="border-top pt-2 pe-2 mb-0 small">3 done</p>
+                        </div>
+                        <div class="col-4">
+                            <svg
+                                class="tend-sprig d-block w-100 h-auto"
+                                aria-hidden="true"
+                                style="--stage:3"
+                                viewBox="0 0 120 200"
+                            >
+                            </svg>
+                            <p class="border-top pt-2 pe-2 mb-0 small">7 done</p>
+                        </div>
+                        <div class="col-5">
+                            <svg
+                                class="tend-sprig d-block w-100 h-auto"
+                                aria-hidden="true"
+                                style="--stage:5"
+                                viewBox="0 0 120 200"
+                            >
+                            </svg>
+                            <p class="border-top pt-2 mb-0 small">12 done</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </footer>
+    </section>
 
-</div>
+    <!-- Final CTA -->
+    <section class="tend-section text-center" aria-labelledby="cta-title">
+        <div class="container-xl px-4">
+            <svg
+                class="tend-mark text-primary mb-3"
+                aria-hidden="true"
+                style="width:2rem;
+                       height:2rem"
+            >
+                <use href="#leaf" />
+            </svg>
+            <h2 id="cta-title" class="tend-display display-4 mb-3">Start small.</h2>
+            <p class="lead text-body-secondary mb-5">Pick something you've been meaning to do.</p>
+            <a class="btn btn-primary btn-lg rounded-pill px-4" href="#">Start tending</a>
+        </div>
+    </section>
+
 {% endblock content %}
