@@ -81,6 +81,19 @@ class TaskListTests(TestCase):
 		self.assertContains(list_response, 'alert-success')
 		self.assertContains(list_response, 'Category added.')
 
+	def test_category_can_be_created_from_management_page(self):
+		response = self.client.post(
+			reverse('tasks:category_create'),
+			{'name': 'Planning', 'return_to': 'manage'},
+		)
+		list_response = self.client.get(response.url)
+
+		self.assertEqual(response.url, reverse('tasks:category_list'))
+		self.assertTrue(Category.objects.filter(name='Planning').exists())
+		self.assertContains(list_response, 'Planning')
+		self.assertContains(list_response, 'alert-success')
+		self.assertContains(list_response, 'Category added.')
+
 	def test_category_management_page_lists_categories_and_task_counts(self):
 		category = Category.objects.create(name='Study')
 		self.create_task(title='Review notes', category=category)
@@ -383,6 +396,19 @@ class TaskListTests(TestCase):
 		self.assertContains(response, 'High')
 		self.assertContains(response, '1 task')
 
+	def test_priority_can_be_created_from_management_page(self):
+		response = self.client.post(
+			reverse('tasks:priority_create'),
+			{'name': 'Critical', 'return_to': 'manage'},
+		)
+		list_response = self.client.get(response.url)
+
+		self.assertEqual(response.url, reverse('tasks:priority_list'))
+		self.assertTrue(Priority.objects.filter(name='Critical').exists())
+		self.assertContains(list_response, 'Critical')
+		self.assertContains(list_response, 'alert-success')
+		self.assertContains(list_response, 'Priority added.')
+
 	def test_priority_can_be_updated_without_unlinking_tasks(self):
 		priority = Priority.objects.create(name='High')
 		task = self.create_task(title='Important task', priority=priority)
@@ -569,6 +595,16 @@ class TaskListTests(TestCase):
 		self.assertContains(response, 'data-title="Review roadmap"')
 		self.assertContains(response, 'data-description="Check milestones"')
 		self.assertContains(response, 'tasks/task_list.js')
+
+	def test_task_mutation_forms_include_scroll_return_path(self):
+		group = TaskGroup.objects.create(user=self.user, name='Website refresh')
+		task = self.create_task(title='Update homepage', group=group)
+
+		response = self.client.get(reverse('tasks:group', args=[group.pk]))
+
+		self.assertContains(response, 'data-preserve-scroll')
+		self.assertContains(response, f'data-scroll-return-path="{reverse("tasks:group", args=[group.pk])}"')
+		self.assertContains(response, f'action="{reverse("tasks:edit", args=[task.pk])}"')
 
 	def test_task_list_hides_another_users_tasks(self):
 		other_user = get_user_model().objects.create_user(username='other-user')

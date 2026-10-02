@@ -12,6 +12,14 @@
         <a class="button button-secondary" href="{% url 'tasks:list' %}">Back to tasks</a>
     </div>
 
+    <form class="admin-create-form" method="post" action="{% url 'tasks:category_create' %}">
+        {% csrf_token %}
+        <input type="hidden" name="return_to" value="manage">
+        <label class="visually-hidden" for="new-category-name">New category name</label>
+        <input id="new-category-name" name="name" type="text" maxlength="60" placeholder="e.g. Home, Study, Work" required>
+        <button class="button button-primary" type="submit">Add category</button>
+    </form>
+
     {% if categories %}
         <ul class="category-admin-list">
             {% for category in categories %}

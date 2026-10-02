@@ -12,6 +12,14 @@
         <a class="button button-secondary" href="{% url 'tasks:list' %}">Back to tasks</a>
     </div>
 
+    <form class="admin-create-form" method="post" action="{% url 'tasks:priority_create' %}">
+        {% csrf_token %}
+        <input type="hidden" name="return_to" value="manage">
+        <label class="visually-hidden" for="new-priority-name">New priority name</label>
+        <input id="new-priority-name" name="name" type="text" maxlength="60" placeholder="e.g. Urgent, Next, Someday" required>
+        <button class="button button-primary" type="submit">Add priority</button>
+    </form>
+
     {% if priorities %}
         <ul class="category-admin-list">
             {% for priority in priorities %}

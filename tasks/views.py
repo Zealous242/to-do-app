@@ -156,6 +156,7 @@ def delete_task(request, pk):
 @require_POST
 def create_category(request):
 	group_id = request.POST.get('group') or None
+	return_to_manager = request.POST.get('return_to') == 'manage'
 	if group_id:
 		get_object_or_404(TaskGroup, pk=group_id, user=request.user)
 	form = CategoryForm(request.POST)
@@ -164,6 +165,8 @@ def create_category(request):
 		messages.success(request, 'Category added.')
 	else:
 		messages.error(request, 'Enter a unique category name of 60 characters or fewer.')
+	if return_to_manager:
+		return redirect('tasks:category_list')
 	return _task_list_redirect(group_id)
 
 
@@ -202,6 +205,7 @@ def delete_category(request, pk):
 @require_POST
 def create_priority(request):
 	group_id = request.POST.get('group') or None
+	return_to_manager = request.POST.get('return_to') == 'manage'
 	if group_id:
 		get_object_or_404(TaskGroup, pk=group_id, user=request.user)
 	form = PriorityForm(request.POST)
@@ -210,6 +214,8 @@ def create_priority(request):
 		messages.success(request, 'Priority added.')
 	else:
 		messages.error(request, 'Enter a unique priority name of 60 characters or fewer.')
+	if return_to_manager:
+		return redirect('tasks:priority_list')
 	return _task_list_redirect(group_id)
 
 

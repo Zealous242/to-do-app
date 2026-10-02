@@ -146,11 +146,13 @@
                                 data-description="{{ task.description }}"
                                 data-category="{% if task.category %}{{ task.category.pk }}{% endif %}"
                                 data-priority="{% if task.priority %}{{ task.priority.pk }}{% endif %}">Edit</button>
-                            <form method="post" action="{% url 'tasks:toggle' task.pk %}">
+                            <form method="post" action="{% url 'tasks:toggle' task.pk %}" data-preserve-scroll
+                                data-scroll-return-path="{% if task.group_id %}{% url 'tasks:group' task.group_id %}{% else %}{% url 'tasks:list' %}{% endif %}">
                                 {% csrf_token %}
                                 <button class="text-action" type="submit">Done</button>
                             </form>
-                            <form method="post" action="{% url 'tasks:delete' task.pk %}">
+                            <form method="post" action="{% url 'tasks:delete' task.pk %}" data-preserve-scroll
+                                data-scroll-return-path="{% if task.group_id %}{% url 'tasks:group' task.group_id %}{% else %}{% url 'tasks:list' %}{% endif %}">
                                 {% csrf_token %}
                                 <button class="text-action text-action-danger" type="submit">Delete</button>
                             </form>
@@ -183,11 +185,13 @@
                             {% if task.description %}<p class="task-description">{{ task.description|linebreaksbr }}</p>{% endif %}
                         </div>
                         <div class="task-actions">
-                            <form method="post" action="{% url 'tasks:toggle' task.pk %}">
+                            <form method="post" action="{% url 'tasks:toggle' task.pk %}" data-preserve-scroll
+                                data-scroll-return-path="{% if task.group_id %}{% url 'tasks:group' task.group_id %}{% else %}{% url 'tasks:list' %}{% endif %}">
                                 {% csrf_token %}
                                 <button class="text-action" type="submit">Undo</button>
                             </form>
-                            <form method="post" action="{% url 'tasks:delete' task.pk %}">
+                            <form method="post" action="{% url 'tasks:delete' task.pk %}" data-preserve-scroll
+                                data-scroll-return-path="{% if task.group_id %}{% url 'tasks:group' task.group_id %}{% else %}{% url 'tasks:list' %}{% endif %}">
                                 {% csrf_token %}
                                 <button class="text-action text-action-danger" type="submit">Delete</button>
                             </form>
@@ -247,7 +251,7 @@
         </div>
         <button class="dialog-close" type="button" data-close-dialog aria-label="Close dialog">&times;</button>
     </div>
-    <form class="edit-form" id="task-edit-form" method="post">
+    <form class="edit-form" id="task-edit-form" method="post" data-preserve-scroll data-scroll-return-path="{{ list_url }}">
         {% csrf_token %}
         <input type="hidden" name="modal" value="1">
         <label for="{{ edit_form.title.id_for_label }}">Task</label>

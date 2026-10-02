@@ -6,7 +6,7 @@
 <section class="edit-panel">
     <p class="eyebrow">A SMALL ADJUSTMENT</p>
     <h1>Edit your task.</h1>
-    <form class="edit-form" method="post">
+    <form class="edit-form" method="post" data-preserve-scroll data-scroll-return-path="{% if selected_group %}{% url 'tasks:group' selected_group.pk %}{% else %}{% url 'tasks:list' %}{% endif %}">
         {% csrf_token %}
         <label for="{{ form.title.id_for_label }}">Task</label>
         {{ form.title }}

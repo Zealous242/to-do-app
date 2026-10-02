@@ -1,6 +1,27 @@
 const editDialog = document.querySelector('#task-edit-dialog');
 const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
 const taskFilterForm = document.querySelector('.task-filter-form');
+const scrollKeyForPath = (path) => `task-list-scroll:${path}`;
+const savedScroll = sessionStorage.getItem(scrollKeyForPath(window.location.pathname));
+
+if (savedScroll !== null) {
+    const restoreScroll = () => window.setTimeout(() => {
+        window.scrollTo(0, Number(savedScroll));
+        sessionStorage.removeItem(scrollKeyForPath(window.location.pathname));
+    }, 0);
+    if (document.readyState === 'complete') {
+        restoreScroll();
+    } else {
+        window.addEventListener('load', restoreScroll, {
+            once: true
+        });
+    }
+}
+
+const rememberScroll = (element) => {
+    const returnPath = element.dataset.scrollReturnPath || window.location.pathname;
+    sessionStorage.setItem(scrollKeyForPath(returnPath), String(window.scrollY));
+};
 
 document.querySelectorAll('[data-toggle-password]').forEach((button) => {
     const passwordInput = button.closest('.password-input-wrap').querySelector('input');
@@ -20,29 +41,15 @@ document.querySelectorAll('[data-toggle-password]').forEach((button) => {
 });
 
 if (taskFilterForm) {
-    const scrollKey = `task-filter-scroll:${window.location.pathname}`;
-    const savedScroll = sessionStorage.getItem(scrollKey);
-
-    if (savedScroll !== null) {
-        const restoreFilterScroll = () => window.setTimeout(() => {
-            window.scrollTo(0, Number(savedScroll));
-            sessionStorage.removeItem(scrollKey);
-        }, 0);
-        if (document.readyState === 'complete') {
-            restoreFilterScroll();
-        } else {
-            window.addEventListener('load', restoreFilterScroll, {
-                once: true
-            });
-        }
-    }
-
-    const saveFilterScroll = () => sessionStorage.setItem(scrollKey, String(window.scrollY));
-    taskFilterForm.addEventListener('submit', saveFilterScroll);
+    taskFilterForm.addEventListener('submit', () => rememberScroll(taskFilterForm));
     document.querySelectorAll('.filter-chip-remove, .filter-reset').forEach((link) => {
-        link.addEventListener('click', saveFilterScroll);
+        link.addEventListener('click', () => rememberScroll(link));
     });
 }
+
+document.querySelectorAll('[data-preserve-scroll]').forEach((form) => {
+    form.addEventListener('submit', () => rememberScroll(form));
+});
 
 document.querySelectorAll('[data-confirm-delete]').forEach((form) => {
     form.addEventListener('submit', (event) => {
