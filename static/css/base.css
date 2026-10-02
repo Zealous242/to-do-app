@@ -1,0 +1,235 @@
+:root, [data-bs-theme="light"] {
+    --leaf-on-primary: #fff;
+    color: var(--bs-body-color);
+    --bs-body-bg: #f1f4ec;
+    --bs-body-color: #1e2b22;
+    --bs-secondary-color: #5a6b5e;
+    --bs-tertiary-bg: #ebeed8;
+    --bs-tertiary-bg-rgb: 235, 238, 216;
+    --bs-border-color: #d3d9c0;
+    --bs-primary: #5b6d33;
+    --bs-primary-rgb: 91, 109, 51;
+    --bs-primary-bg-subtle: #dfe5c6;
+    --bs-link-color: var(--bs-primary);
+    --bs-link-color-rgb: var(--bs-primary-rgb);
+    --bs-link-hover-color: #435226;
+    --bs-border-radius: .75rem;
+    --bs-border-radius-lg: 1.25rem;
+    --bs-body-font-family: "Instrument Sans", system-ui, sans-serif;
+    --bs-body-line-height: 1.65;
+    --leaf-display: "Newsreader", Georgia, serif;
+}
+[data-bs-theme="dark"] {
+    --leaf-on-primary: #11190f;
+    color: var(--bs-body-color);
+    --bs-body-bg: #111a14;
+    --bs-body-color: #e2eadf;
+    --bs-secondary-color: #9aab9e;
+    --bs-tertiary-bg: #1b2518;
+    --bs-tertiary-bg-rgb: 27, 37, 24;
+    --bs-border-color: #323c28;
+    --bs-primary: #a9ba7a;
+    --bs-primary-rgb: 169, 186, 122;
+    --bs-primary-bg-subtle: #232c1b;
+    --bs-link-hover-color: #c4d29a;
+}
+:root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    --sans: "Instrument Sans", -apple-system, Blink;
+}
+html {
+    scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 4.5rem);
+    scroll-behavior: smooth;
+    scrollbar-color: var(--bs-secondary-color) var(--bs-body-bg);
+    scrollbar-width: auto;
+}
+body {
+    background: var(--bs-body-bg);
+    margin: 0;
+    font-family: var(--sans);
+    line-height: 1.5;
+}
+h1, h2, h3, h4, .font-display {
+    font-family: var(--leaf-display);
+    font-weight: 400;
+    letter-spacing: -.015em;
+    line-height: 1.12;
+}
+.lede {
+    max-width: 34rem;
+    font-size: 1.125rem;
+    color: var(--bs-secondary-color);
+}
+.leaf {
+    width: 1.25em;
+    height: 1.25em;
+    vertical-align: -.2em;
+}
+#navbar {
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    background-color: hsl(var(--bs-border-color) 0.9, transparent);
+}
+
+/* Bootstrap components, retinted through their own variables */
+.sticky-top {
+    top: env(safe-area-inset-top, 0px);
+}
+
+.btn-primary {
+    --bs-btn-color: var(--leaf-on-primary);
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-color: var(--leaf-on-primary);
+    --bs-btn-hover-bg: var(--bs-link-hover-color);
+    --bs-btn-hover-border-color: var(--bs-link-hover-color);
+    --bs-btn-active-color: var(--leaf-on-primary);
+    --bs-btn-active-bg: var(--bs-link-hover-color);
+    --bs-btn-active-border-color: var(--bs-link-hover-color);
+    --bs-btn-focus-shadow-rgb: var(--bs-primary-rgb);
+    --bs-btn-font-weight: 500;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-color: var(--leaf-on-primary);
+    --bs-btn-hover-bg: var(--bs-primary);
+    --bs-btn-hover-border-color: var(--bs-primary);
+    --bs-btn-active-color: var(--leaf-on-primary);
+    --bs-btn-active-bg: var(--bs-primary);
+    --bs-btn-active-border-color: var(--bs-primary);
+}
+.nav-pills {
+    --bs-nav-pills-link-active-bg: var(--bs-primary);
+    --bs-nav-pills-link-active-color: var(--leaf-on-primary);
+    --bs-nav-link-color: var(--bs-secondary-color);
+    --bs-nav-link-hover-color: var(--bs-body-color);
+}
+.accordion {
+    --bs-accordion-bg: transparent;
+    --bs-accordion-active-bg: var(--bs-tertiary-bg);
+    --bs-accordion-active-color: var(--bs-body-color);
+    --bs-accordion-border-color: var(--bs-border-color);
+    --bs-accordion-btn-focus-box-shadow: 0 0 0 .25rem rgba(var(--bs-primary-rgb), .25);
+}
+.accordion-button {
+    font-family: var(--leaf-display);
+    font-size: 1.2rem;
+}
+.form-check-input:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 .25rem rgba(var(--bs-primary-rgb), .25);
+}
+.form-check-input:checked + .form-check-label {
+    color: var(--bs-secondary-color);
+    text-decoration: line-through;
+    text-decoration-color: var(--bs-primary);
+}
+.progress {
+    --bs-progress-bg: var(--bs-tertiary-bg);
+    --bs-progress-bar-bg: var(--bs-primary);
+}
+.card {
+    --bs-card-bg: var(--bs-tertiary-bg);
+    --bs-card-border-color: transparent;
+}
+.tend-display {
+    font-family: var(--leaf-display);
+    font-weight: 400;
+    letter-spacing: -.02em;
+    line-height: 1.1
+}
+.tend-section {
+    padding-block: clamp(4rem, 10vw, 8rem)
+}
+.tend-mark {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none
+}
+
+/* Growth visual: --stage (0-5) drives the stem, leaves and flower. A part shows once --stage >= its --min. */
+.tend-sprig {
+    color: var(--bs-primary);
+    overflow: visible
+}
+.tend-stem {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: max(0, calc(.68 - .17 * var(--stage)), calc(.92 - .41 * var(--stage)));
+    transition: stroke-dashoffset .8s ease
+}
+.tend-part {
+    --g: calc(var(--stage) - var(--min) + 1);
+    opacity: clamp(0, var(--g), 1);
+    transform: scale(clamp(.6, calc(.45 + .15 * var(--g)), 1));
+    transition: opacity .6s ease, transform .8s ease;
+    transition-delay: .15s
+}
+.tend-sprout {
+    opacity: clamp(0, calc(1 - var(--stage)), 1);
+    transition: opacity .5s ease
+}
+.tend-bloom {
+    transform: scale(clamp(.3, calc(.3 + .7 * var(--g)), 1))
+}
+.tend-front {
+    transform: scale(clamp(.1, calc(.1 + .45 * var(--g)), 1))
+}
+/* Petals are filled with the surface colour so front petals hide the back ones */
+.tend-sprig {
+    --tend-fill: var(--bs-tertiary-bg)
+}
+.bg-primary-subtle .tend-sprig {
+    --tend-fill: var(--bs-primary-bg-subtle)
+}
+.tend-petals {
+    fill: var(--tend-fill);
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linejoin: round;
+    stroke-linecap: round
+}
+
+/* Circle -> leaf task check box */
+.tend-task {
+    cursor: pointer
+}
+.tend-task:has(:checked) {
+    color: var(--bs-secondary-color)
+}
+.tend-check {
+    border-color: var(--bs-secondary-color);
+    background-color: transparent;
+    cursor: pointer
+}
+.form-check-input.tend-check:checked[type=checkbox] {
+    background-image: none;
+    background-color: transparent;
+    border-color: transparent
+}
+.form-check-input.tend-check:focus {
+    border-color: var(--bs-secondary-color);
+    box-shadow: none
+}
+.form-check-input.tend-check:focus-visible {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 .25rem rgba(var(--bs-primary-rgb), .3)
+}
+.tend-check + .tend-leaf {
+    transition: opacity .3s ease
+}
+.tend-check:not(:checked) + .tend-leaf {
+    opacity: 0
+}
+@media (prefers-reduced-motion:reduce) {
+    .tend-stem, .tend-part, .tend-sprout, .tend-leaf {
+        transition: none
+    }
+}
