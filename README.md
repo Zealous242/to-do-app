@@ -10,7 +10,7 @@ The garden/growth idea is the brand metaphor, not a literal gardening-themed UI.
 
 ## Live Site Link
 
-[View the live site here:](https://to-do-app-1242-0c9652a17a93.herokuapp.com/)
+[View the live site here:](https://to-do-app-1242-0c9652a17a93.herokuapp.com)
 
 ## Project Board
 
