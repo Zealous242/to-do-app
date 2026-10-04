@@ -1,0 +1,35 @@
+<article class="task-item {% if task.status == 'done' %}task-completed{% endif %}">
+    <div class="task-main">
+        <form
+            method="post"
+            action="{% url 'task:toggle' task.pk %}"
+            class="toggle-form"
+        >
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <button
+                type="submit"
+                class="task-checkbox"
+                aria-label="{% if task.status == 'done' %}Mark {{ task.title }} as not done{% else %}Mark {{ task.title }} as done{% endif %}"
+            >
+                {% if task.status == 'done' %}✓{% endif %}
+            </button>
+        </form>
+
+        <div class="task-content">
+            <h2>
+                <a href="{% url 'task:detail' task.pk %}" class="project-link">{{ task.title }}</a>
+            </h2>
+
+            {% if task.description %}
+                <p>{{ task.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="task-actions">
+        <span class="status-badge">{{ task.get_status_display }}</span>
+        <a href="{% url 'task:edit' task.pk %}" class="edit-button">Edit</a>
+        <a href="{% url 'task:delete' task.pk %}?next={{ request.path|urlencode }}" class="edit-button project-delete">Delete</a>
+    </div>
+</article>

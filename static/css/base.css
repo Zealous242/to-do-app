@@ -1525,3 +1525,180 @@ h1, h2, h3, h4, .font-display {
         transition: none
     }
 }
+
+/* Projects list */
+
+.project-form-card {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+}
+
+.project-form-card h2 {
+    margin: 0 0 1.25rem;
+    font-size: 1.3rem;
+}
+
+.project-form label {
+    font-weight: 700;
+}
+
+.project-form input[type="text"],
+.project-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+}
+
+.project-form input:focus,
+.project-form textarea:focus {
+    outline: 2px solid var(--surface-soft);
+    border-color: var(--primary);
+}
+
+.project-form .btn-primary {
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+}
+
+.project-form-error {
+    color: var(--danger);
+    font-size: 0.9rem;
+}
+
+.project-link {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.project-link:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.task-actions .edit-button:hover {
+    background: var(--surface-soft);
+}
+
+.task-actions .project-delete {
+    color: var(--danger);
+}
+
+
+/* Project detail and delete */
+
+.back-link {
+    margin: 0 0 1.25rem;
+}
+
+.back-link a {
+    color: var(--muted);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.back-link a:hover {
+    color: var(--primary);
+}
+
+.project-meta {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.status-badge {
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    background: var(--surface-soft);
+    color: var(--primary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.task-completed .project-link {
+    color: var(--muted);
+    text-decoration: line-through;
+}
+
+.delete-message {
+    margin: 0 0 1.5rem;
+    color: var(--muted);
+}
+
+.delete-message strong {
+    color: var(--text);
+}
+
+.task-form button.danger-submit[type="submit"] {
+    background: var(--danger);
+}
+
+.task-form button.danger-submit[type="submit"]:hover {
+    background: #7f2626;
+}
+
+
+/* Projects sort bar */
+
+.sort-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+.sort-bar label {
+    font-weight: 700;
+    color: var(--muted);
+}
+
+.sort-bar select {
+    padding: 0.5rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    cursor: pointer;
+}
+
+
+/* Create task modal */
+
+.project-form select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+}
+
+.modal-card:has(.project-form) {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.task-section-heading {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem;
+}
+
+.task-list + .task-list {
+    margin-top: 2.5rem;
+}
+

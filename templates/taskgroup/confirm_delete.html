@@ -3,13 +3,21 @@
 {% block title %}Delete {{ taskgroup.name }} | To Do{% endblock title %}
 
 {% block content %}
-    <section aria-labelledby="delete-project-heading">
-        <h1 id="delete-project-heading">Delete project</h1>
-        <p>Are you sure you want to delete “{{ taskgroup.name }}”?</p>
-        <form method="post">
-            {% csrf_token %}
-            <button type="submit">Delete project</button>
+<div class="task-form">
+    <h1 id="delete-project-heading">Delete project</h1>
+
+    <p class="delete-message">
+        Are you sure you want to delete <strong>&ldquo;{{ taskgroup.name }}&rdquo;</strong>?
+        This will also delete every task in the project and cannot be undone.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-actions">
             <a href="{% url 'taskgroup:list' %}">Cancel</a>
-        </form>
-    </section>
+            <button type="submit" class="danger-submit">Delete project</button>
+        </div>
+    </form>
+</div>
 {% endblock content %}

@@ -89,3 +89,54 @@ initTend();
 
 document.addEventListener('htmx:afterSwap', initTend);
 document.addEventListener('htmx:oobAfterSwap', initTend);
+
+// Keep scroll position across delete / toggle round-trips
+const SCROLL_KEY = 'tend-restore-scroll';
+
+function nextTarget(urlString, form) {
+    const url = new URL(urlString, location.origin);
+    const fromForm = form?.querySelector('input[name="next"]')?.value;
+    return fromForm || url.searchParams.get('next') || location.pathname + location.search;
+}
+
+function rememberScroll(urlString, form) {
+    sessionStorage.setItem(SCROLL_KEY, JSON.stringify({
+        y: window.scrollY,
+        target: nextTarget(urlString, form),
+        at: Date.now(),
+    }));
+}
+
+function restoreScroll() {
+    const raw = sessionStorage.getItem(SCROLL_KEY);
+    if (!raw) return;
+
+    const saved = JSON.parse(raw);
+    if (Date.now() - saved.at > 30000) return sessionStorage.removeItem(SCROLL_KEY);
+    if (saved.target !== location.pathname + location.search) return;
+
+    sessionStorage.removeItem(SCROLL_KEY);
+    history.scrollRestoration = 'manual';
+    window.scrollTo(0, saved.y);
+}
+
+const ACTION_PATH = /\/task\/\d+\/(delete|toggle)\//;
+
+document.addEventListener('click', e => {
+    const link = e.target.closest('a[href]');
+    if (link && ACTION_PATH.test(link.getAttribute('href'))) {
+        rememberScroll(link.href);
+    }
+});
+
+document.addEventListener('submit', e => {
+    const form = e.target;
+    if (form.method === 'post' && ACTION_PATH.test(form.getAttribute('action') || '')) {
+        // Only remember when leaving a list page, not from the confirm page itself
+        if (!form.closest('[aria-labelledby="delete-task-heading"]')) {
+            rememberScroll(form.action, form);
+        }
+    }
+});
+
+restoreScroll();

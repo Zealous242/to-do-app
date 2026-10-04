@@ -1,0 +1,48 @@
+<article class="task-item {% if task.status == 'done' %}task-completed{% endif %}">
+    <div class="task-main">
+        <form
+            method="post"
+            action="{% url 'task:toggle' task.pk %}"
+            class="toggle-form"
+        >
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="task-checkbox"
+                aria-label="Toggle {{ task.title }}"
+            >
+                {% if task.status == 'done' %}
+                    ✓
+                {% endif %}
+            </button>
+        </form>
+
+        <div class="task-content">
+            <h2>{{ task.title }}</h2>
+
+            {% if task.description %}
+                <p>{{ task.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="task-actions">
+        <a
+            href="{% url 'task:edit' task.pk %}"
+            class="edit-button"
+        >
+            Edit
+        </a>
+
+        <button
+            type="button"
+            class="delete-button"
+            data-delete-url="{% url 'task:delete' task.pk %}?next={{ request.get_full_path|urlencode }}"
+            data-task-title="{{ task.title }}"
+        >
+            🗑
+            <span class="sr-only">Delete {{ task.title }}</span>
+        </button>
+    </div>
+</article>

@@ -4,7 +4,10 @@ from typing import Any
 
 from django.views.generic import TemplateView
 
+from task.forms import TaskForm
 from task.models import Task
+from task.sorting import get_task_sort, sort_tasks, task_sort_choices
+from taskgroup.models import TaskGroup
 
 
 class AccountDashboardView(TemplateView):
@@ -33,9 +36,26 @@ class AccountDashboardView(TemplateView):
             selected_filter = "all"
             displayed_tasks = tasks
 
+        default_group = TaskGroup.objects.filter(
+            user=self.request.user, name="My Tasks"
+        ).first()
+        form = TaskForm(taskgroup=default_group)
+        if default_group is None:
+            form.fields["parent"].queryset = Task.objects.none()
+
+        context.update(
+            {"form": form},
+        )
+        sorted_tasks = list(
+            sort_tasks(displayed_tasks, self.request.GET.get("sort"))
+        )
         context.update(
             {
-                "tasks": displayed_tasks,
+                "tasks": sorted_tasks,
+                "incomplete_tasks": [t for t in sorted_tasks if t.status != "done"],
+                "completed_tasks": [t for t in sorted_tasks if t.status == "done"],
+                "sort": get_task_sort(self.request.GET.get("sort")),
+                "sort_options": task_sort_choices(),
                 "todo_count": todo_count,
                 "completed_count": completed_count,
                 "total_count": todo_count + completed_count,

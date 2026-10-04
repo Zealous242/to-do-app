@@ -6,6 +6,7 @@
 
     <form method="post">
         {% csrf_token %}
+        {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}">{% endif %}
 
         {{ form.non_field_errors }}
 
@@ -27,6 +28,6 @@
         <button type="submit">Create task</button>
     </form>
 
-    <a href="{% url 'taskgroup:detail' taskgroup.pk %}">Cancel</a>
+    <a href="{% if next_url %}{{ next_url }}{% else %}{% url 'taskgroup:detail' taskgroup.pk %}{% endif %}">Cancel</a>
 </div>
 {% endblock %}

@@ -8,8 +8,9 @@
         <p>Are you sure you want to delete "{{ task.title }}"?</p>
         <form method="post">
             {% csrf_token %}
+            {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}">{% endif %}
             <button type="submit">Delete task</button>
-            <a href="{% url 'taskgroup:detail' task.group_id %}">Cancel</a>
+            <a href="{% if next_url %}{{ next_url }}{% else %}{% url 'taskgroup:detail' task.group_id %}{% endif %}">Cancel</a>
         </form>
     </section>
 {% endblock content %}

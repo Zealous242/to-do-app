@@ -17,15 +17,36 @@
     <nav class="navbar py-3" aria-label="Main">
         <div class="container-xl px-4">
             <a
-                class="navbar-brand d-flex align-items-center gap-2 tend-display fs-3 me-auto"
+                class="navbar-brand d-flex align-items-center gap-2 tend-display                 fs-3 me-3"
                 href="{% url 'core:home' %}"
             >
                 <svg class="tend-mark text-primary" aria-hidden="true">
                     <use href="#leaf" />
                 </svg>Tend
             </a>
+                            <ul class="navbar-nav flex-row align-items-center gap-2 me-auto">
+                                {% if user.is_authenticated %}
+                                    <li class="nav-item"><a
+    class="btn btn-outline-primary btn-sm rounded-pill px-3"
+    href="{% url 'accounts:dashboard' %}"
+>All tasks</a></li>
+                                    <li class="nav-item"><a
+                    class="btn btn-outline-primary btn-sm rounded-pill px-3"
+                    href="{% url 'taskgroup:list' %}"
+                >Projects</a></li>
+                                {% endif %}
+                            </ul>
             <ul class="navbar-nav flex-row align-items-center gap-3">
                 {% if user.is_authenticated %}
+                    <li class="nav-item d-none d-md-block">
+                        <span class="small text-body-secondary">{{ user.email|default:user.get_username }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'account_logout' %}" class="m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill px-3">Log out</button>
+                        </form>
+                    </li>
                     <li class="nav-item"><a
     class="btn btn-primary btn-sm rounded-pill px-3"
     href="{% url 'accounts:dashboard' %}"

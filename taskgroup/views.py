@@ -1,8 +1,13 @@
 """Views for managing task group dashboards, organizing tasks, and project workflows."""
 
+from django.db.models.functions import Lower
 from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, DetailView, ListView, UpdateView
+
+from task.forms import TaskForm
+from task.sorting import get_task_sort, sort_tasks, task_sort_choices
 
 from .forms import TaskGroupForm
 from .models import TaskGroup
@@ -24,13 +29,29 @@ class TaskGroupListView(ListView):
     context_object_name = "taskgroups"
     form_class = TaskGroupForm
 
+    SORT_OPTIONS = {
+        "name": ("Name (A-Z)", (Lower("name"), "pk")),
+        "-name": ("Name (Z-A)", (Lower("name").desc(), "-pk")),
+        "-created": ("Newest first", ("-created_at", "-pk")),
+        "created": ("Oldest first", ("created_at", "pk")),
+    }
+    default_sort = "name"
+
+    def get_sort(self) -> str:
+        """Return the requested sort key, falling back to the default."""
+        sort = self.request.GET.get("sort", self.default_sort)
+        return sort if sort in self.SORT_OPTIONS else self.default_sort
+
     def get_queryset(self):
-        """Limit the list to task groups owned by the current user."""
-        return super().get_queryset().filter(user=self.request.user).order_by("name")
+        """Limit the list to the user's task groups, ordered by the chosen sort."""
+        ordering = self.SORT_OPTIONS[self.get_sort()][1]
+        return super().get_queryset().filter(user=self.request.user).order_by(*ordering)
 
     def get_context_data(self, **kwargs):
-        """Add the project form to the list page context."""
+        """Add the project form and sort options to the list page context."""
         context = super().get_context_data(**kwargs)
+        context["sort"] = self.get_sort()
+        context["sort_options"] = [(key, label) for key, (label, _) in self.SORT_OPTIONS.items()]
         context.setdefault("form", self.form_class())
         return context
 
@@ -42,7 +63,7 @@ class TaskGroupListView(ListView):
             project = form.save(commit=False)
             project.user = request.user
             project.save()
-            return self.render_to_response(self.get_context_data())
+            return redirect(request.get_full_path())
 
         return self.render_to_response(self.get_context_data(form=form), status=400)
 
@@ -72,6 +93,19 @@ class TaskGroupDetailView(UserTaskGroupMixin, DetailView):
     model = TaskGroup
     template_name = "taskgroup/detail.html"
     context_object_name = "taskgroup"
+
+    def get_context_data(self, **kwargs):
+        """Add a blank task form for the create-task modal."""
+        context = super().get_context_data(**kwargs)
+        context["form"] = TaskForm(taskgroup=self.object)
+        sort = self.request.GET.get("sort")
+        tasks = list(sort_tasks(self.object.tasks.all(), sort))
+        context["tasks"] = tasks
+        context["incomplete_tasks"] = [t for t in tasks if t.status != "done"]
+        context["completed_tasks"] = [t for t in tasks if t.status == "done"]
+        context["sort"] = get_task_sort(sort)
+        context["sort_options"] = task_sort_choices()
+        return context
 
 
 # class TaskGroupDetailView(DetailView):

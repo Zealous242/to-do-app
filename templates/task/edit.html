@@ -3,13 +3,33 @@
 {% block title %}Edit {{ task.title }} | To Do{% endblock title %}
 
 {% block content %}
-    <section aria-labelledby="edit-task-heading">
-        <h1 id="edit-task-heading">Edit task</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Save changes</button>
+<div class="task-form">
+    <h1>Edit task</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        {% for field in form %}
+            <div class="form-field">
+                {{ field.label_tag }}
+                {{ field }}
+
+                {% if field.help_text %}
+                    <small>{{ field.help_text }}</small>
+                {% endif %}
+
+                {% for error in field.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <div class="form-actions">
             <a href="{% url 'taskgroup:detail' task.group_id %}">Cancel</a>
-        </form>
-    </section>
+            <button type="submit">Save changes</button>
+        </div>
+    </form>
+</div>
 {% endblock content %}

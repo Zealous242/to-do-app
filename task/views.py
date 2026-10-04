@@ -3,6 +3,7 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 
@@ -52,6 +53,7 @@ class TaskCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["taskgroup"] = self.get_taskgroup()
+        context["next_url"] = self.get_next_url()
         return context
 
     def get_form_kwargs(self):
@@ -64,8 +66,21 @@ class TaskCreateView(CreateView):
         messages.success(self.request, "Task created successfully.")
         return super().form_valid(form)
 
+    def get_next_url(self):
+        """Return a safe same-site return address, or an empty string."""
+        next_url = self.request.POST.get("next") or self.request.GET.get("next", "")
+        if url_has_allowed_host_and_scheme(
+            next_url,
+            allowed_hosts={self.request.get_host()},
+            require_https=self.request.is_secure(),
+        ):
+            return next_url
+        return ""
+
     def get_success_url(self):
-        return reverse_lazy("taskgroup:detail", kwargs={"pk": self.object.group_id})
+        return self.get_next_url() or reverse_lazy(
+            "taskgroup:detail", kwargs={"pk": self.object.group_id}
+        )
 
 
 class TaskUpdateView(UserTaskMixin, UpdateView):
@@ -103,6 +118,12 @@ class TaskToggleView(View):
 
         task.save(update_fields=["status", "updated_at"])
 
+        next_url = request.POST.get("next", "")
+        if url_has_allowed_host_and_scheme(
+            next_url, allowed_hosts={request.get_host()}, require_https=request.is_secure()
+        ):
+            return redirect(next_url)
+
         return redirect("accounts:dashboard")
 
 
@@ -113,9 +134,26 @@ class TaskDeleteView(UserTaskMixin, DeleteView):
     template_name = "task/confirm_delete.html"
     context_object_name = "task"
 
+    def _next_url(self):
+        next_url = self.request.POST.get("next") or self.request.GET.get("next", "")
+        if url_has_allowed_host_and_scheme(
+            next_url,
+            allowed_hosts={self.request.get_host()},
+            require_https=self.request.is_secure(),
+        ):
+            return next_url
+        return ""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["next_url"] = self._next_url()
+        return context
+
     def form_valid(self, form):
         messages.success(self.request, "Task deleted successfully.")
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy("taskgroup:detail", kwargs={"pk": self.object.group_id})
+        return self._next_url() or reverse_lazy(
+            "taskgroup:detail", kwargs={"pk": self.object.group_id}
+        )

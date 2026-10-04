@@ -1,0 +1,54 @@
+<div
+    id="task-modal"
+    class="modal"
+    hidden
+>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="create-task-heading">
+        <h2 id="create-task-heading">Create task{% if taskgroup %} in {{ taskgroup.name }}{% endif %}</h2>
+
+        <form method="post" action="{{ create_url }}" class="project-form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+
+            {{ form.non_field_errors }}
+
+            {% for field in form %}
+                <div class="form-field">
+                    {{ field.label_tag }}
+                    {{ field }}
+
+                    {% for error in field.errors %}
+                        <div class="project-form-error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <div class="modal-actions">
+                <button type="button" id="cancel-task-modal">Cancel</button>
+                <button type="submit" class="btn-primary">Create task</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    (() => {
+        const taskModal = document.getElementById("task-modal");
+        const hide = () => { taskModal.hidden = true; };
+
+        document.querySelectorAll("[data-open-task-modal]").forEach((button) => {
+            button.addEventListener("click", () => {
+                taskModal.hidden = false;
+                taskModal.querySelector("input[type=text]")?.focus();
+            });
+        });
+
+        document.getElementById("cancel-task-modal").addEventListener("click", hide);
+        taskModal.addEventListener("click", (event) => {
+            if (event.target === taskModal) hide();
+        });
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && !taskModal.hidden) hide();
+        });
+    })();
+</script>

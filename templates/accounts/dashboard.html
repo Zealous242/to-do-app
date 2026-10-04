@@ -9,13 +9,6 @@
         <a href="{% url 'accounts:dashboard' %}" class="dashboard-logo">
             to-do
         </a>
-
-        <form method="post" action="{% url 'account_logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="logout-button">
-                Logout
-            </button>
-        </form>
     </header>
 
     <section class="dashboard-header">
@@ -27,101 +20,80 @@
             </p>
         </div>
 
-        <a href="{% url 'task:create' %}" class="btn-primary">
+        <button type="button" class="btn-primary" data-open-task-modal>
             + Add task
-        </a>
+        </button>
     </section>
 
     <nav class="task-filters" aria-label="Task filters">
         <a
-            href="{% url 'accounts:dashboard' %}"
+            href="?sort={{ sort }}"
             class="{% if selected_filter == 'all' %}active{% endif %}"
         >
             All ({{ total_count }})
         </a>
 
         <a
-            href="?filter=todo"
+            href="?filter=todo&sort={{ sort }}"
             class="{% if selected_filter == 'todo' %}active{% endif %}"
         >
             To do ({{ todo_count }})
         </a>
 
         <a
-            href="?filter=completed"
+            href="?filter=completed&sort={{ sort }}"
             class="{% if selected_filter == 'completed' %}active{% endif %}"
         >
             Completed ({{ completed_count }})
         </a>
     </nav>
 
-    <section class="task-list">
-        {% for task in tasks %}
-            <article
-                class="task-item {% if task.status == 'done' %}task-completed{% endif %}"
-            >
-                <div class="task-main">
+    {% if tasks %}
+        <form method="get" class="sort-bar">
+            <input type="hidden" name="filter" value="{{ selected_filter }}">
+            <label for="sort-select">Sort by</label>
+            <select id="sort-select" name="sort" onchange="this.form.submit()">
+                {% for value, label in sort_options %}
+                    <option value="{{ value }}" {% if value == sort %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            <noscript><button type="submit" class="edit-button">Apply</button></noscript>
+        </form>
+    {% endif %}
 
-                    <form
-                        method="post"
-                        action="{% url 'task:toggle' task.pk %}"
-                        class="toggle-form"
-                    >
-                        {% csrf_token %}
-
-                        <button
-                            type="submit"
-                            class="task-checkbox"
-                            aria-label="Toggle {{ task.title }}"
-                        >
-                            {% if task.status == 'done' %}
-                                ✓
-                            {% endif %}
-                        </button>
-                    </form>
-
-                    <div class="task-content">
-                        <h2>{{ task.title }}</h2>
-
-                        {% if task.description %}
-                            <p>{{ task.description }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="task-actions">
-                    <a
-                        href="{% url 'task:edit' task.pk %}"
-                        class="edit-button"
-                    >
-                        Edit
-                    </a>
-
-                    <button
-                        type="button"
-                        class="delete-button"
-                        data-delete-url="{% url 'task:delete' task.pk %}"
-                        data-task-title="{{ task.title }}"
-                    >
-                        🗑
-                        <span class="sr-only">Delete {{ task.title }}</span>
-                    </button>
-                </div>
-            </article>
-
-        {% empty %}
-            <div class="empty-state">
-                <h2>No tasks yet!</h2>
-                <p>Add your first task to get started.</p>
-
-                <a href="{% url 'task:create' %}" class="btn-primary">
-                    + Add task
-                </a>
-            </div>
+    {% if incomplete_tasks %}
+    <section class="task-list" aria-label="To do tasks">
+        <h2 class="task-section-heading">To do ({{ incomplete_tasks|length }})</h2>
+        {% for task in incomplete_tasks %}
+            {% include "accounts/_task_item.html" %}
         {% endfor %}
     </section>
+    {% endif %}
+
+    {% if completed_tasks %}
+    <section class="task-list" aria-label="Completed tasks">
+        <h2 class="task-section-heading">Completed ({{ completed_tasks|length }})</h2>
+        {% for task in completed_tasks %}
+            {% include "accounts/_task_item.html" %}
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if not tasks %}
+        <div class="empty-state">
+            <h2>No tasks yet!</h2>
+            <p>Add your first task to get started.</p>
+
+            <button type="button" class="btn-primary" data-open-task-modal>
+                + Add task
+            </button>
+        </div>
+    {% endif %}
 </div>
 
+
+{% url 'task:create' as create_url %}
+{% include "task/_create_modal.html" %}
 
 <div
     id="delete-modal"
